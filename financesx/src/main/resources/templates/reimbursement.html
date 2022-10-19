@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Remboursements</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+
+<body>
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+	<!-- 1. Add JQuery and Highcharts in the head of your page -->
+	<script type="text/javascript"
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+	<script src="http://code.highcharts.com/highcharts.js"></script>
+
+	<!-- 2. You can add print and export feature by adding this line -->
+	<script src="http://code.highcharts.com/modules/exporting.js"></script>
+
+	<script th:inline="javascript" type="text/javascript">
+	 
+	<!-- Remboursements mensuels -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container2', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Remboursements mensuels',
+	        style: {
+	            color: 'black',
+	            font: 'bold 25px "Trebuchet MS", Verdana, sans-serif',
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keyReimbursement}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    
+	    yAxis: {
+	        title: {
+	          text: '€',
+	          style: {
+	                color: 'white',
+	                fontSize:'20px'
+	            },
+	          rotation: 0,
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	       name: 'Remboursements mensuel',
+	       data: [[${valuesReimbursement}]]
+	    }]
+		});
+	});
+	  
+	  	  
+	  <!-- budgets mensuels moyens avec remboursements   -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container1', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Budgets moyens mensuels avec Remboursements',
+	        style: {
+	            color: 'black',
+	            font: 'bold 25px "Trebuchet MS", Verdana, sans-serif',
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keyAverageBudgetWithReimbursements}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    
+	    yAxis: {
+	        title: {
+	          text: '€',
+	          style: {
+	                color: 'black',
+	                fontSize:'20px'
+	            },
+	          rotation: 0,
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	       name: 'Budgets moyens mensuels avec Remboursements',
+	       data: [[${valuesAverageBudgetWithReimbursements}]]
+	    }]
+		});
+	}); 
+	 
+	 
+	  
+ </script>
+
+	<!-- 3. Add the container -->
+	<div id="container1" class="graph1" style="width: 100%; height: 800px;"></div>
+	<div id="container2" class="graph1" style="width: 100%; height: 800px;"></div>
+
+
+	<!-- footer block -->
+	<!--  <div th:replace="footer :: footer"></div> -->
+	<!-- //footer block -->
+
+</body>
+</html>

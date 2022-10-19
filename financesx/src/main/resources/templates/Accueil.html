@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+<meta charset="utf-8">
+<title>Accueil</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+<link rel="stylesheet" href="css/styles.css">
+</head>
+
+
+
+<body>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.min.js" integrity="sha384-IDwe1+LCz02ROU9k972gdyvl+AESN10+x7tBKgc9I5HFtuNz0wWnPclzo6p9vxnk" crossorigin="anonymous"></script>
+	
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="h1pagetittle">
+				<h1>MyMoney</h1>
+				<p class="pcenter">Visualiser simplement l'état et l'historique des vos finances</p>
+			</div>
+		</div>
+
+		<div class="row">
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">
+				<div class="card" style="width: 20rem;">
+				  	<img src="images/graphfinance0.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Dépenses et revenus</h3>
+				    <p class="card-text">Affiche les sommes et moyennes pour chaque poste de dépense et de revenu.</p>
+				    <a href="displayGlobalstats.html" class="btn btn-primary align-self-end">Afficher</a>
+				  </div>
+				</div>
+			</div>
+			
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">
+				<div class="card" style="width: 20rem;">
+				  	<img src="images/graphfinance2.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Historique</h3>
+				    <p class="card-text">Affiche l'historique d'une catégorie sur base mensuelle.</p>
+				    <a href="displayStatsHistory.html" class="btn btn-primary align-self-end">Afficher</a>
+				  </div>
+				</div>								
+			</div>
+			
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">		
+				<div class="card" style="width: 20rem;">
+				  <img src="images/graphfinance3.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Gains / pertes</h3>
+				    <p class="card-text">Affiche les gains ou pertes par mois.</p>
+				    <a href="displaygainsandlosses.html" class="btn btn-primary align-self-end">Afficher</a>
+				  </div>
+				</div>		
+			</div>
+			
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">		
+				<div class="card" style="width: 20rem;">
+				  <img src="images/graphfinance4.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Budget</h3>
+				    <p class="card-text">Affiche le budget : sommes des dépenses de fonctionnement (hors épargne et hors remboursement).</p>
+				    <a href="displaybudget.html" class="btn btn-primary">Afficher</a>
+				  </div>
+				</div>	
+			</div>
+			
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">		
+				<div class="card" style="width: 20rem;">
+				  <img src="images/graphfinance5.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Budget avec Remboursements</h3>
+				    <p class="card-text">Afficher le budget moyen mensuel incluant les remboursements et les remboursements mensuels.</p>
+				    <a href="displayreimbursement.html" class="btn btn-primary">Afficher</a>	
+				  </div>
+				</div>			
+			</div>
+			
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">		
+				<div class="card" style="width: 20rem;">
+				  <img src="images/graphfinance6.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Répartition des dépenses</h3>
+				    <p class="card-text">Pourcentage et montants des dépenses de chaque catégorie par rapport aux dépenses globales.</p>
+				    <a href="displayexpensescatpie.html" class="btn btn-primary">Afficher</a>
+				  </div>
+				</div>	
+			</div>
+		</div>	
+		
+		
+		<div class="row">
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">
+				<div class="card" style="width: 20rem;">
+				  	<img src="images/graphfinance7.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Alimentation / Hygiène</h3>
+				    <p class="card-text">Affiche des statistiques détaillés sur Alimenation/Hygiène</p>
+				    <a href="displayalimspecific.html" class="btn btn-primary align-self-end">Afficher</a>
+				  </div>
+				</div>
+			</div>
+			
+			<div class="col-lg-auto col-md-4 col-sm-6 d-flex align-items-stretch">
+				<div class="card" style="width: 20rem;">
+				  	<img src="images/graphfinance8.jpg" class="card-img-top" alt="...">
+				  <div class="card-body text-center">
+				    <h3 class="card-title">Dépenses du mois</h3>
+				    <p class="card-text">Affiche des statistiques détaillés sur un mois</p>
+				    <a href="displaymonthstats.html" class="btn btn-primary align-self-end">Afficher</a>
+				  </div>
+				</div>
+			</div>
+		
+		<!-- footer block -->
+		<!-- <div th:replace="footer :: footer"></div>-->
+		<!-- //footer block -->
+
+	</div>
+
+</body>
+</html>

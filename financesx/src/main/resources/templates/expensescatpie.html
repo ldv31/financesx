@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="utf-8">
+	    <title>Répartition des dépenses</title>
+		<link rel="stylesheet" href="css/styles.css">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+ 	</head>
+ 
+ 
+ 
+<body>		
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+ 	<!-- 1. Add JQuery and Highcharts in the head of your page -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+      
+    <!-- 2. You can add print and export feature by adding this line -->
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+	<script th:inline="javascript" type="text/javascript">
+	 
+	<!-- A. Sommes des dépenses par categories sur piechart -->
+		
+	jQuery(document).ready(function() {
+		  
+		// this is populated by Thymeleaf:
+	    var pieChartData = /*[[${expensescatpie}]]*/ [];
+
+	    var series = [];
+	    var data = [];
+	    
+	    
+	    for (var i = 0; i < pieChartData.length; i++) {
+	        var object = {};
+	        object.name = pieChartData[i].index;
+	        object.y = pieChartData[i].opValue;
+	        data.push(object);
+	    }
+	    
+	    var seriesObject = {
+	        name: 'Répartition des dépenses (hors épargne)',
+	        colorByPoint: true,
+	        data: data
+	    };
+	    series.push(seriesObject);
+	    drawPieChart(series);
+
+	    
+	// draw the pie chart:
+    function drawPieChart(series1) {	
+		
+	 Highcharts.chart('container1', {
+	    chart: {
+	    	plotBackgroundColor: null,
+	        plotBorderWidth: null,
+	        plotShadow: false,
+	        type: 'pie',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	    	useHTML: true,
+	        text: 'Répartition des dépenses (hors épargne)',
+	        style: {
+	            color: 'black',
+	            font: 'bold 35px "Trebuchet MS", Verdana, sans-serif',
+	            'background-color': 'white'
+	         }
+	    },
+	    
+	    tooltip: {
+	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	      },
+	      accessibility: {
+	        point: {
+	          valueSuffix: '%'
+	        }
+	      },
+	    
+	    plotOptions: {
+	    	pie: {
+	    	      allowPointSelect: true,
+	    	      cursor: 'pointer',
+	    	      dataLabels: {
+	    	        enabled: true,
+	    	        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+    	        	style: {
+                        color: 'black',
+                        fontSize:'20px'
+                    }
+	    	      }
+	        }
+	    },
+	    
+	    
+	    series: series1    
+	   
+	  }); // end of container
+	 
+	  } // end of draw pie chart
+	  
+	}); // end of main function
+	  
+	 
+	 
+	<!-- B. Sommes des dépenses par categories sur piechart vs income -->
+	
+	jQuery(document).ready(function() {
+		  
+		// this is populated by Thymeleaf:
+	    var pieChartData = /*[[${expensesvsincomecatpie}]]*/ [];
+
+	    var series = [];
+	    var data = [];
+	    
+	    
+	    for (var i = 0; i < pieChartData.length; i++) {
+	        var object = {};
+	        object.name = pieChartData[i].index;
+	        object.y = pieChartData[i].opValue;
+	        data.push(object);
+	    }
+	    
+	    var seriesObject = {
+	        name: 'Répartition des dépenses vs revenus (hors épargne)',
+	        colorByPoint: true,
+	        data: data
+	    };
+	    series.push(seriesObject);
+	    drawPieChart(series);
+
+	    
+	// draw the pie chart:
+    function drawPieChart(series1) {	
+		
+	 Highcharts.chart('container2', {
+	    chart: {
+	    	plotBackgroundColor: null,
+	        plotBorderWidth: null,
+	        plotShadow: false,
+	        type: 'pie',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	    	useHTML: true,
+	    	text: 'Répartition des dépenses vs revenus (hors épargne)',
+	        style: {
+	            color: '#000',
+	            font: 'bold 35px "Trebuchet MS", Verdana, sans-serif',
+	            'background-color': 'white'
+	         }
+	    },
+	    
+	    tooltip: {
+	        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+	      },
+	      accessibility: {
+	        point: {
+	          valueSuffix: '%'
+	        }
+	      },
+	    
+	    plotOptions: {
+	    	pie: {
+	    	      allowPointSelect: true,
+	    	      cursor: 'pointer',
+	    	      dataLabels: {
+	    	        enabled: true,
+	    	        //format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	    	        format: '<b>{point.name}</b>',
+    	        	style: {
+                        color: 'black',
+                        fontSize:'20px'
+                    }
+	    	      }
+	        }
+	    },
+	    
+	    
+	    series: series1    
+	   
+	  }); // end of container
+	 
+	  } // end of draw pie chart
+	  
+	}); // end of main function
+	
+	  
+ </script>
+ 
+  <!-- 3. Add the container -->
+  <div class="graph1"  id="container1" style="width:100%; height:800px;"></div>
+  <div class="graph1"  id="container2" style="width:100%; height:800px;"></div>
+
+  
+ 
+ <!-- footer block -->
+ <!--   <div th:replace="footer :: footer"></div> -->
+ <!-- //footer block -->
+
+ </body> 
+</html>

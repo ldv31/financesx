@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="utf-8">
+	    <title>Historique</title>
+		<link rel="stylesheet" href="css/styles.css">
+		<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+ 	</head>
+ 
+ 	<!-- header -->
+	<!--     <div th:replace="header :: header"></div>-->
+	<!-- //header -->
+ 
+ 
+<body>		
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+ 	<!-- 1. Add JQuery and Highcharts in the head of your page -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+      
+    <!-- 2. You can add print and export feature by adding this line -->
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+	<script th:inline="javascript" type="text/javascript">
+	 
+	<!-- A. Sommes des dépenses par categories -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container1', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Historique de categorie: ' + [[${CategoryNameDefault}]],
+	        style: {
+	            color: 'black',
+	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keySetCategoryHistory}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    
+	    yAxis: {
+	        min: 0,
+	        title: {
+	          text: '€'
+	        }
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	        name: [[${CategoryName}]], 
+	       data: [[${valuesCategoryHistory}]]
+	    },
+	    {
+	        name: [[${CategoryNameAverage}]], 
+	       data: [[${valuesCategoryHistoryAverage}]]
+	    }]
+	  });
+	});
+	  
+ 
+	  
+ </script>
+ 
+ <div>
+  	<form name='f' th:object="${opCategoryObject}" method='POST' action="historystatsselect.html">
+        <table>
+            <tr>
+                <td>Select Category: </td>
+                <td>
+                    <select th:field="*{name}">
+                         <option th:each="category: ${categorieslist}" th:value="${category.name}" th:utext="${category.name}"></option>
+                  </select>
+                </td>
+            </tr>
+            <tr>
+                <td><button name="submit" type="submit" value="submit" class="btn btn-primary">Envoyer</button></td>
+            </tr>
+        </table>
+    </form>
+  </div>
+  
+  <!-- 3. Add the container and the topdown menu-->
+  <div id="container1" class="graph1" style="width:100%; height:800px;">
+  </div>
+  
+   
+
+
+ 
+ <!-- footer block -->
+ <!--   <div th:replace="footer :: footer"></div> -->
+ <!-- //footer block -->
+
+ </body> 
+</html>

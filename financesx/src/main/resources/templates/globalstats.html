@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+	<head>
+	    <meta charset="utf-8">
+	    <title>Dépenses et revenus</title>	    
+	    <link rel="stylesheet" href="css/styles.css">
+	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">	     
+ 	</head>
+ 
+ 	<!-- header -->
+	<!--     <div th:replace="header :: header"></div>-->
+	<!-- //header -->
+ 
+<body>		
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+
+ 	<!-- 1. Add JQuery and Highcharts in the head of your page -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+      
+    <!-- 2. You can add print and export feature by adding this line -->
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+	<script th:inline="javascript" type="text/javascript">
+	 
+	<!-- A. Sommes des dépenses par categories -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container1', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Sommes des dépenses par categories',
+	        style: {
+	            color: 'black',
+	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keySet}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    
+	    yAxis: {
+	        min: 0,
+	        title: {
+	          text: '€',
+	          style: {
+	                color: 'black',
+	                fontSize:'20px'
+	            }
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	        name: 'Catégories',
+	       data: [[${values}]]
+	    }]
+		});
+	});
+	  
+	  	  
+	  <!-- B. Sommes des recettes par categories -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container2', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Sommes des recettes par categories',
+	        style: {
+	            color: 'black',
+	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keySetSumCredit}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}        
+	    },
+	    
+	    
+	    yAxis: {
+	        min: 0,
+	        title: {
+	          text: '€',
+	          style: {
+	                color: 'black',
+	                fontSize:'20px'	             
+	            }
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	       name: 'Catégories',
+	       data: [[${valuesSumCredit}]]
+	    }]
+	    
+		});
+	});
+	 
+	  
+	    
+	  
+	  <!-- C. Moyenne des depenses par categories -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container3', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Moyenne des depenses par categories et par mois',
+	        style: {
+	            color: 'black',
+	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keySetMoyDebit}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    yAxis: {
+	        min: 0,
+	        title: {
+	          text: '€',
+	          style: {
+	                color: 'black',
+	                fontSize:'20px'
+	            }
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	        name: 'Catégories',
+	       data: [[${valuesMoyDebit}]]
+	   
+	    }]
+	    
+		});
+	});
+	  
+	  
+	  <!-- D. Moyenne des recettes par categories -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container4', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Moyenne des recettes par categories et par mois',
+	        style: {
+	            color: 'black',
+	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keySetMoyCredit}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    yAxis: {
+	        min: 0,
+	        title: {
+	          text: '€',
+	          style: {
+	                color: 'black',
+	                fontSize:'20px'
+	            }
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}        
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	        name: 'Catégories',
+	       data: [[${valuesMoyCredit}]]
+	   
+	    }]
+	    
+		});
+	});
+	  
+ </script>
+ 
+  <!-- 3. Add the container -->
+  <div id="container1" class="graph1"></div>
+  <div id="container2" class="graph1"></div>
+  <div id="container3" class="graph1"></div>
+  <div id="container4" class="graph1"></div>   
+
+ 
+ <!-- footer block -->
+ <!--   <div th:replace="footer :: footer"></div> -->
+ <!-- //footer block -->
+
+ </body> 
+</html>

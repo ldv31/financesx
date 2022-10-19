@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <title>Ajouter des opérations</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+</head>
+ 	
+<body>		
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+ 	<!-- 1. Add JQuery and Highcharts in the head of your page -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+      
+    <!-- 2. You can add print and export feature by adding this line -->
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+	<script th:inline="javascript" type="text/javascript"></script>
+ 
+<div>
+
+ <form class="graph1" action="displayuploadresults.html" method="post">
+ 
+	 <div class="mb-3">
+	  <label for="exampleFormControlInput1" class="form-label">Entrer le chemin du fichier des opérations</label>
+	  <input type="text" class="form-control" id="exampleFormControlInput1" placeholder="/Example.csv" name="uploadfilepath">
+	</div>
+    <br>
+    <input type="submit" class="btn btn-primary">
+  </form>
+
+</div> 
+
+
+</body> 
+</html>

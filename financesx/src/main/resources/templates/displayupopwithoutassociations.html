@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="fr" xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Liste des opérations sans associations</title>
+	<link rel="stylesheet" href="css/styles.css">
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+
+</head>
+
+<body>
+
+	<!-- header -->
+	<div th:replace="header :: header"></div>
+
+	<div>
+		<table class="table table-hover caption-top">		
+			<caption class="captiontable1">Opérations sans associations</caption>
+			<tr style="background-color: #EEEEEE">
+			    <th>Date opération</th>
+			    <th>Date valeur</th>
+			    <th>Libellé</th>
+			    <th>Débit</th>
+			    <th>Crédit</th>
+			    <th>Association</th>
+			    <th>Mode association</th>
+			</tr>
+			<tr th:each="operation : ${opBookDataWithoutAssociation}">
+   				<td th:text="${operation.dateOp}"></td>
+   				<td th:text="${operation.dateVal}"></td>
+   				<td th:text="${operation.libelle}"></td>
+   				<td th:text="${operation.Debit}"></td>
+   				<td th:text="${operation.Credit}"></td>
+   				<td th:text="${operation.Association}"></td>
+   				<td th:text="${operation.aMode}"></td>					
+			</tr>			
+		</table>
+	</div>
+</body>
+</html>
