@@ -454,6 +454,11 @@ public class OperationStatistics implements OpStatInterface {
 		lStat = new ArrayList<StatType1>();
 		lStatGlobal = new ArrayList<StatType1>();
 		
+		// update the list of operation without association in case the user modify the category of thos operations
+		opBook.opWithoutAssociation();
+		
+		
+		// recompute all stats
 		calculateAll ();
 		numberOfOpWithoutAssociation = opBook.getCountWithoutAssociation();
 		sumValueCredit = opBook.getSumValueCredit();

@@ -71,7 +71,7 @@ public class OperationsBook implements FileMgtInterface {
 
 	// operation Book stats data
 	OperationBookStats operationBookStats = new OperationBookStats();
-
+	
 	@PostConstruct
 	public void OperationsBookSetup() throws Exception {
 
@@ -143,7 +143,6 @@ public class OperationsBook implements FileMgtInterface {
 		fillAssociationBookData();
 
 		// display operations without associations and set the corresponding values
-		opBookDataWithoutAssociation = new ArrayList<Operation>();
 		opWithoutAssociation();
 
 		// generation de la liste des catégories
@@ -333,6 +332,10 @@ public class OperationsBook implements FileMgtInterface {
 	}
 
 	public void opWithoutAssociation() {
+		
+		// reset operation without association list
+		opBookDataWithoutAssociation = new ArrayList<Operation>();
+		
 		LogManager.LOGGER.log(Level.FINE, "********************************************************");
 		LogManager.LOGGER.log(Level.FINE, "******** Liste des opérations sans associations ********");
 		LogManager.LOGGER.log(Level.FINE, "********************************************************");

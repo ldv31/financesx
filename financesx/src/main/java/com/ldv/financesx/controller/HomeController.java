@@ -17,6 +17,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ldv.financesx.ErrorCodeAndMessage;
 import com.ldv.financesx.LogManager;
 import com.ldv.financesx.OperationsResults;
+import com.ldv.financesx.model.AssociationMode;
 import com.ldv.financesx.model.CategoryType;
 import com.ldv.financesx.model.GlobalStatsDataType;
 import com.ldv.financesx.model.Operation;
@@ -129,7 +130,7 @@ public class HomeController {
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("historystats.html");
 		
-		// Initla category to display
+		// Init the  category to display
 		String opCategorieUserChoice = new String("EDF");
 		
 		// will be used for the value selected in the drop-down
@@ -137,7 +138,7 @@ public class HomeController {
 		opCategoryObject.setName("EDF");
 		opCategoryObject.setType(CategoryType.TOUS);
 		model.addAttribute("opCategoryObject", opCategoryObject);
-		//modelAndView.addObject("opCategoryObject", opCategoryObject);
+	
 		LogManager.LOGGER.log(Level.INFO,"Category object: " + opCategoryObject + "  Category : " + opCategoryObject.getName());
 		LogManager.LOGGER.log(Level.INFO,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObject.getName());
 		
@@ -413,7 +414,7 @@ public class HomeController {
 			// ajouter dans le model le nombre d'opérations ajoutées pour affichage dans la page HTML
 			modelAndView.addObject("saveFileResult", saveFileResult);
 			
-			// mettre à jours les statistiques
+			// mettre à jour les statistiques
 			opStatsService.updateStats();	
 		}
 		else {
@@ -441,6 +442,25 @@ public class HomeController {
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displayupopwithoutassociations.html");
 		
+			
+		// Init the  category to display
+		//String opCategorieUserChoice = new String("EDF");
+		
+		// will be used for the value selected in the drop-down
+		
+		OperationCategory opCategoryObjectNoAsso = new OperationCategory();
+		opCategoryObjectNoAsso.setName("EDF");
+		opCategoryObjectNoAsso.setType(CategoryType.TOUS);
+		model.addAttribute("opCategoryObjectNoAsso", opCategoryObjectNoAsso);
+		
+	
+	
+		LogManager.LOGGER.log(Level.INFO,"Category object: " + opCategoryObjectNoAsso + "  Category : " + opCategoryObjectNoAsso.getName());
+		
+		
+		LogManager.LOGGER.log(Level.INFO,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObjectNoAsso.getName());
+		
+					
 		opBookDataWithoutAssociation = opStatsService.getOpWithoutAssociation();
 		
 		// ajouter dans le modèle les opérations sans associations
@@ -451,7 +471,99 @@ public class HomeController {
         
 	}
 	
+
+	// page to display after selecting a category in the drop-down
+	@RequestMapping(value ={"/opnoassociationselect.html"}, method = RequestMethod.POST)
+	public ModelAndView displayopnoassociationSelect(@ModelAttribute("opCategoryObjectNoAsso") OperationCategory opCategoryObjectNoAsso, 
+			@RequestParam("opIdTxt") String opIdTxt, Model model) {
+		
+		// operation results message 
+		String resultMessage;
+		
+		// list of operations without association
+		ArrayList<Operation> opBookDataWithoutAssociation;
+		
+		// operation id;
+		int opId = -1;
+		
+		// operation to update (if found)
+		Operation opUpdate = null;
+		
+		LogManager.LOGGER.log(Level.INFO,"Category object after select: " + opCategoryObjectNoAsso);
+		
+		OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObjectNoAsso");
+		LogManager.LOGGER.log(Level.INFO,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
+		
+		LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html + category name : " + opCategoryObjectNoAsso.getName());
+
+		
+		LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html + opeeration ID : " + opIdTxt);
+		
+		// create model and view
+		ModelAndView modelAndView = new ModelAndView("opnoassociationselect.html");
+			
+		
+		//retrieve the list of operation and display the one whith change category	
+		opBookDataWithoutAssociation = opStatsService.getOpWithoutAssociation();
+		
+		// verify if the input string for ID is empty
+		if (!opIdTxt.isEmpty()) {
+			
+			opId = Integer.parseInt(opIdTxt);
+			
+			// search for the operation corresponding to the operation id provided by the user
+			for (Operation op : opBookDataWithoutAssociation) {
+				if (op.getOpId() == opId) {
+					LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html + Libellé opération  : " + op);
+					opUpdate = op;			
+				}
+			}
+		}
+		
+		// update operation and save or return error
+		if (opUpdate != null) {
+			LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html => changing association mode from  "
+					+ opUpdate.getAssociation() + " to " + opCategoryObjectNoAsso.getName());
+			
+			// update operation
+			opUpdate.setAssociation(opCategoryObjectNoAsso.getName());
+			opUpdate.setaMode(AssociationMode.MANUAL);
+			
+			// recalculate stats and save operation
+			// sauvegarde du fichier des opérations avec les nouvelles mises à jour
+			//saveFileResult = opStatsService.saveFinance();
+			opStatsService.saveFinance();
+			
+			// ajouter dans le model le nombre d'opérations ajoutées pour affichage dans la page HTML
+			//modelAndView.addObject("saveFileResult", saveFileResult);
+			
+			// mettre à jour les statistiques
+			opStatsService.updateStats();
+			
+			resultMessage = "Mise à jour de la catégorie : " + opUpdate.getAssociation() + " réussie pour l' opération : " + opUpdate;
+			
+		} else  { // error
+			LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html => error => opid not found : " + opId);
+			resultMessage = "Identifiant invalid ou non précisé";
+		}
+		
+		
+		// get the update list of operation without category 	
+		opBookDataWithoutAssociation = opStatsService.getOpWithoutAssociation();
 	
+		// ajouter dans le modèle les opérations sans associations
+		modelAndView.addObject("opBookDataWithoutAssociation", opBookDataWithoutAssociation);
+		
+		// ajouter le message de retour
+		modelAndView.addObject("resultMessage", resultMessage);
+		
+ 
+        // Main return statement 
+        return modelAndView;
+        
+	}
+	
+
 	
 	// affichage specifique pour alimentation et hygiène
 	@RequestMapping(value ={"/displayalimspecific.html"})
@@ -558,7 +670,5 @@ public class HomeController {
 		list.addAll(opStatsService.getCategoriesList());
 		return list;
 	}
-	
-	
 	
 }

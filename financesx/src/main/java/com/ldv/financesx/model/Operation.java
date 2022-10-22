@@ -3,6 +3,9 @@ package com.ldv.financesx.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.logging.Level;
+
+import com.ldv.financesx.LogManager;
 
 /* Description : stockage des informations relative à une opération bancaire 
  * 
@@ -54,7 +57,10 @@ public class Operation {
 		if (credit != 0)
 			lCategoryType  = CategoryType.CREDIT;
 		else
-			lCategoryType  = CategoryType.DEBIT;	
+			lCategoryType  = CategoryType.DEBIT;
+		
+		
+		LogManager.LOGGER.log(Level.INFO,"Category object after select: " + this);
 	}
 	
 	
@@ -78,7 +84,7 @@ public class Operation {
 	
 	public String toString () {
 	
-		return dateOp.format(df) + "\t" + dateVal.format(df) 
+		return opId + "\t" + dateOp.format(df) + "\t" + dateVal.format(df) 
 		+ "\t" + libelle +"\t\t"+ debit + "\t" + credit + "\t" + association + "\t" + aMode.getTxtMode();
 		
 	}
