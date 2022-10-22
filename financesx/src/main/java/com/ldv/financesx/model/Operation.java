@@ -9,6 +9,10 @@ import java.time.format.DateTimeFormatter;
  */
 public class Operation {
 	
+	// unique operation identifier, generated when the operation is created
+	private static int opIdCounter = 0;
+	private int opId;
+	
 	// Dates
 	//private DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
 	private DateTimeFormatter df = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -35,6 +39,10 @@ public class Operation {
 	
 	// Eléments de l'opération
 	public Operation (String dateOp, String dateVal, String libelle, double debit, double credit, String pAssociation, AssociationMode lmode) {
+		
+		// set the Id of the operation
+		this.opId = opIdCounter++;
+		
 		setDateOp (dateOp);
 		setDateVal (dateVal);
 		this.libelle = libelle;
@@ -174,6 +182,15 @@ public class Operation {
 	public void setaMode(AssociationMode aMode) {
 		this.aMode = aMode;
 	}
-	
+
+
+	public int getOpId() {
+		return opId;
+	}
+
+
+	public void setOpId(int opId) {
+		this.opId = opId;
+	}
 	
 }

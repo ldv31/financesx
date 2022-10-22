@@ -551,13 +551,7 @@ public class HomeController {
         
 	}
 	
-	
-	
-	
-	
-	
-	
-	// direct injection of attributes for list of catégories
+	// direct injection of attributes for list of categories
 	@ModelAttribute("categorieslist")
 	public List<OperationCategory> getCategoriesList() {
 		List<OperationCategory> list = new ArrayList<>();

@@ -20,10 +20,11 @@
 			    <th>Date opération</th>
 			    <th>Date valeur</th>
 			    <th>Libellé</th>
-			    <th>Débit</th>
-			    <th>Crédit</th>
+			    <th>Débit(€)</th>
+			    <th>Crédit(€)</th>
 			    <th>Association</th>
 			    <th>Mode association</th>
+			    <th>Identifiant d'opération</th>
 			</tr>
 			<tr th:each="operation : ${opBookDataWithoutAssociation}">
    				<td th:text="${operation.dateOp}"></td>
@@ -32,7 +33,8 @@
    				<td th:text="${operation.Debit}"></td>
    				<td th:text="${operation.Credit}"></td>
    				<td th:text="${operation.Association}"></td>
-   				<td th:text="${operation.aMode}"></td>					
+   				<td th:text="${operation.aMode}"></td>
+   				<td th:text="${operation.opId}"></td>					
 			</tr>			
 		</table>
 	</div>
