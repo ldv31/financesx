@@ -1,15 +1,10 @@
 package com.ldv.financesx.repository;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
 
-import javax.swing.JLabel;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -27,7 +22,7 @@ import com.ldv.financesx.model.StatsDataSeriesType2;
 import com.ldv.financesx.model.CategoriesList;
 
 import com.ldv.financesx.model.StatDataHistory;
-import com.ldv.financesx.model.StatDataType;
+
 
 @Component
 public class OpStatsRepository {
@@ -525,11 +520,20 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 					monthExpenses.put(lOpStat.getOpCategory(), (double)0);
 				}			
 			}	
-		}
-		
+		}		
 		return monthExpenses;
 	}
 	
+	
+	
+	/**
+    * Return the list of Amazon operation (still not associated to the right category).
+    * @param None.
+    * @return list of Amazon operation.
+    */		
+	public ArrayList<Operation> getOpBookDataAmazon() {			
+			return opStats.getOpBook().getOpBookDataAmazon();		
+	}
 	
 }
 

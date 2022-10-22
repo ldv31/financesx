@@ -7,13 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ldv.financesx.OperationsResults;
-import com.ldv.financesx.model.CategoryType;
 import com.ldv.financesx.model.GlobalInfo;
 import com.ldv.financesx.model.GlobalStatsDataType;
 import com.ldv.financesx.model.Operation;
 import com.ldv.financesx.model.OperationCategory;
 import com.ldv.financesx.model.OperatorStats;
-import com.ldv.financesx.model.StatType1;
 import com.ldv.financesx.model.StatsDataSeriesType2;
 import com.ldv.financesx.repository.OpStatsRepository;
 
@@ -211,5 +209,16 @@ public class OpStatsService {
 	public Map<String, Double> getMonthStats() {
 		return opStatsRepository.getMonthStats();
 	}
+	
+	
+	/**
+    * Return the list of Amazon operation (still not associated to the right category).
+    * @param None.
+    * @return list of Amazon operation.
+    */		
+	public ArrayList<Operation> getOpBookDataAmazon() {			
+		return opStatsRepository.getOpBookDataAmazon();		
+	}
+	
 	
 }

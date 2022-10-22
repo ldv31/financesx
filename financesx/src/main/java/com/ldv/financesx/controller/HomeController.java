@@ -527,6 +527,35 @@ public class HomeController {
 		}
 	
 	
+	/**
+    * Display list of Amazon operations (still not associated to the right category).
+    * @param None.
+    * @return list of Amazon operations.
+    */
+	@RequestMapping(value ={"/displayopamazon.html"})
+	public ModelAndView displayopamazon(Model model) {
+			
+		// list of operations without association
+		ArrayList<Operation> opBookDataAmazon;
+		
+		// create model and view
+		ModelAndView modelAndView = new ModelAndView("displayopamazon.html");
+		
+		opBookDataAmazon = opStatsService.getOpBookDataAmazon();
+		
+		// ajouter dans le modèle les opérations sans associations
+		modelAndView.addObject("opBookDataAmazon", opBookDataAmazon);
+		
+        // Main return statement 
+        return modelAndView;
+        
+	}
+	
+	
+	
+	
+	
+	
 	
 	// direct injection of attributes for list of catégories
 	@ModelAttribute("categorieslist")
@@ -536,22 +565,6 @@ public class HomeController {
 		return list;
 	}
 	
-
-	
-	/* Add in the model a string with the global information to be printed in the footer
-	 * @return : global information 
-	 */
-	/*
-	@ModelAttribute("globalinfo")
-	public String getGlobalInfo() {
-		
-		String rValue = opStatsService.getGlobalInfo();
-		
-		return rValue;
-	}
-	*/
-	
-
 	
 	
 }

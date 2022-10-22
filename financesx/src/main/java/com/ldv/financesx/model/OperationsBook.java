@@ -22,6 +22,10 @@ import com.ldv.financesx.CsvFileHelper;
 import com.ldv.financesx.FileMgtInterface;
 import com.ldv.financesx.LogManager;
 import com.ldv.financesx.OperationsResults;
+
+import com.ldv.financesx.model.CategoriesList;
+import com.ldv.financesx.model.Operation;
+
 import com.ldv.financesx.DialogMessage;
 import com.ldv.financesx.ErrorCodeAndMessage;
 
@@ -349,6 +353,25 @@ public class OperationsBook implements FileMgtInterface {
 	public ArrayList<Operation> getOpBookDataWithoutAssociation() {
 		return opBookDataWithoutAssociation;
 	}
+	
+	
+	/**
+    * Return the list of Amazon operations (still not associated to the right catégory).
+    * @param None.
+    * @return list of Amazon operations.
+    */	
+	public ArrayList<Operation> getOpBookDataAmazon() {
+		
+		ArrayList<Operation> opAmazon = new ArrayList<Operation>();
+		
+		for (Operation opLocal : opBookData) {
+			if (opLocal.getAssociation().equals(CategoriesList.AMAZON.getTxtType()) ) {
+				opAmazon.add(opLocal);
+			}					   
+		}	
+		return opAmazon;
+	}
+	
 
 	// inputString est le tableau des opérations extraites du fichier "finance.csv"
 	// et inputBookData est le livre de compte dans lequel les opération seront
