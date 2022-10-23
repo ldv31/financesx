@@ -19,30 +19,28 @@
 	  	<form name='f' th:object="${opCategoryObjectNoAsso}" method='POST' action="opnoassociationselect.html">
 	        <table>
 	        	<tr>
-	                <td>
+	                <td class="textintable4">
 	                	<label for="exampleFormControlInput1" class="form-label">Entrer l'identifiant de l'opération</label>
 	                </td>	                	
-	                <td>
+	                <td class="textintable4">
 	                	<input type="text" class="form-control" id="exampleFormControlInput1" placeholder="256" name="opIdTxt">    
-	                </td>  
-	            </tr>
-	            <tr>
-	                <td>
+	                </td>
+	                <td class="textintable4">
 	                	<label for="exampleFormControlInput1" class="form-label">Sélectionner la catégorie</label>
 	                </td>
-	                <td>
+	                <td class="textintable4">
 	                    <select th:field="*{name}">
 	                         <option th:each="category: ${categorieslist}" th:value="${category.name}" th:utext="${category.name}"></option>
 	                  </select>
+	                </td> 
+	                <td class="textintable4"><button name="submit" type="submit" value="submit" class="btn btn-primary">Envoyer</button></td> 
+	                <td class="textintable4">
+	                	<label for="exampleFormControlInput1" class="form-label textintable5">Résultat: </label>
+	                	<label  th:text="${resultMessage}" for="exampleFormControlInput1" class="form-label textintable5"></label>
 	                </td>
-	            </tr>
-	            <tr>
-	                <td><button name="submit" type="submit" value="submit" class="btn btn-primary">Envoyer</button></td>
-	            </tr>
+	            </tr>	            
 	        </table>
-	    </form>
-	    <label for="exampleFormControlInput1" class="form-label">Résultat: </label>
-	    <label th:text="${resultMessage}" for="exampleFormControlInput1" class="form-label"></label>
+	    </form>	    
   	</div>
 
 

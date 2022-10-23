@@ -188,6 +188,16 @@ input {
 	padding: 15px;
 }
 
+.textintable4 {
+	border: none;
+	padding: 15px;
+}
+
+.textintable5 {
+	border: none;
+	padding: 5px;
+}
+
 .pcenter {
 	text-align: center;
 	font-size: 1.6rem;

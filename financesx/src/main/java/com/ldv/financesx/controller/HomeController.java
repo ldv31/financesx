@@ -472,7 +472,11 @@ public class HomeController {
 	}
 	
 
-	// page to display after selecting a category in the drop-down
+	/* Display the list of operation without association after selecting a new category for an operation.
+    * @param opCategoryObjectNoAsso the new category to apply to the operation.
+    * @param opIdTxt the unique identifier of the operation.
+    * @return Page to display along with corresponding date in the model.
+    */
 	@RequestMapping(value ={"/opnoassociationselect.html"}, method = RequestMethod.POST)
 	public ModelAndView displayopnoassociationSelect(@ModelAttribute("opCategoryObjectNoAsso") OperationCategory opCategoryObjectNoAsso, 
 			@RequestParam("opIdTxt") String opIdTxt, Model model) {
@@ -653,6 +657,26 @@ public class HomeController {
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displayopamazon.html");
 		
+		// Init the category to display
+		//String opCategorieUserChoice = new String("EDF");
+		
+		// will be used for the value selected in the drop-down
+		
+		OperationCategory opCategoryObjectAmazon = new OperationCategory();
+		opCategoryObjectAmazon.setName("EDF");
+		opCategoryObjectAmazon.setType(CategoryType.TOUS);
+		model.addAttribute("opCategoryObjectAmazon", opCategoryObjectAmazon);
+		
+	
+	
+		LogManager.LOGGER.log(Level.INFO,"Category object: " + opCategoryObjectAmazon + "  Category : " + opCategoryObjectAmazon.getName());
+		
+		
+		LogManager.LOGGER.log(Level.INFO,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObjectAmazon.getName());
+		
+		
+		
+		
 		opBookDataAmazon = opStatsService.getOpBookDataAmazon();
 		
 		// ajouter dans le modèle les opérations sans associations
@@ -662,6 +686,108 @@ public class HomeController {
         return modelAndView;
         
 	}
+	
+	
+	
+
+	/* Display the list of operation from Amazon after selecting a new category for an operation.
+    * @param opCategoryObjectAmazon the new category to apply to the operation.
+    * @param opIdTxt the unique identifier of the operation.
+    * @return Page to display along with corresponding date in the model.
+    */
+	@RequestMapping(value ={"/displayopamazonselect.html"}, method = RequestMethod.POST)
+	public ModelAndView displayopamazonselect(@ModelAttribute("opCategoryObjectAmazon") OperationCategory opCategoryObjectAmazon, 
+			@RequestParam("opIdTxt") String opIdTxt, Model model) {
+			
+		// operation results message 
+		String resultMessage;
+				
+		// list of operations without association
+		ArrayList<Operation> opBookDataAmazon;		
+				
+		// operation id;
+		int opId = -1;
+				
+		// operation to update (if found)
+		Operation opUpdate = null;
+				
+			LogManager.LOGGER.log(Level.INFO,"Category object after select: " + opCategoryObjectAmazon);
+			
+			OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObjectAmazon");
+			LogManager.LOGGER.log(Level.INFO,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
+			
+			LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html + category name : " + opCategoryObjectAmazon.getName());
+
+			
+			LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html + opeeration ID : " + opIdTxt);
+			
+			// create model and view
+			ModelAndView modelAndView = new ModelAndView("displayopamazonselect.html");
+				
+			
+			//retrieve the list of operation and display the one with changed category	
+			opBookDataAmazon = opStatsService.getOpBookDataAmazon();
+			
+			// verify if the input string for ID is empty
+			if (!opIdTxt.isEmpty()) {
+				
+				opId = Integer.parseInt(opIdTxt);
+				
+				// search for the operation corresponding to the operation id provided by the user
+				for (Operation op : opBookDataAmazon) {
+					if (op.getOpId() == opId) {
+						LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html + Libellé opération  : " + op);
+						opUpdate = op;			
+					}
+				}
+			}
+			
+			// update operation and save or return error
+			if (opUpdate != null) {
+				LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html => changing association mode from  "
+						+ opUpdate.getAssociation() + " to " + opCategoryObjectAmazon.getName());
+				
+				// update operation
+				opUpdate.setAssociation(opCategoryObjectAmazon.getName());
+				opUpdate.setaMode(AssociationMode.MANUAL);
+				
+				// recalculate stats and save operation
+				// sauvegarde du fichier des opérations avec les nouvelles mises à jour
+				//saveFileResult = opStatsService.saveFinance();
+				opStatsService.saveFinance();
+				
+				// ajouter dans le model le nombre d'opérations ajoutées pour affichage dans la page HTML
+				//modelAndView.addObject("saveFileResult", saveFileResult);
+				
+				// mettre à jour les statistiques
+				opStatsService.updateStats();
+				
+				resultMessage = "Mise à jour de la catégorie : " + opUpdate.getAssociation() + " réussie pour l' opération : " + opUpdate;
+				
+			} else  { // error
+				LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html => error => opid not found : " + opId);
+				resultMessage = "Identifiant invalid ou non précisé";
+			}
+			
+			
+			// get the update list of operation without category 	
+			opBookDataAmazon = opStatsService.getOpBookDataAmazon();
+		
+			// ajouter dans le modèle les opérations sans associations
+			modelAndView.addObject("opBookDataAmazon", opBookDataAmazon);
+			
+			// ajouter le message de retour
+			modelAndView.addObject("resultMessage", resultMessage);
+			
+		
+		
+		
+		
+        // Main return statement 
+        return modelAndView;
+        
+	}
+	
 	
 	// direct injection of attributes for list of categories
 	@ModelAttribute("categorieslist")
