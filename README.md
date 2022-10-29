@@ -5,4 +5,4 @@ Allow user to visualize his finance status based on statistics calculated from b
 JAVA
 SPRINGBOOT (MVC)
 BOOSTRAP
-HTML/CSS/JAVASCRIP
+HTML/CSS/JAVASCRIPT
