@@ -357,11 +357,15 @@ public class HomeController {
 	// chargement de nouvelles opérations
 	@RequestMapping(value ={"/displayuploadoperations.html"})
 	public ModelAndView displayuploadoperations(Model model) {
-			
+		
+		// operation results
+		int uploadResultCode = -1;
 		
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("upload.html");
 		
+		// add the current operation result. "-1" indicated at this step we only want to display the invite page
+		modelAndView.addObject("uploadResultCode", uploadResultCode);
 		
         // Main return statement 
         return modelAndView;
@@ -374,6 +378,9 @@ public class HomeController {
 	public ModelAndView displayuploadresults(@RequestParam("uploadfilepath") String uploadfilepath, Model model) throws Exception {
 		
 		String saveFileResult;
+		
+		// operation results
+		int uploadResultCode = -1;
 		
 		ModelAndView modelAndView;
 		
@@ -419,7 +426,13 @@ public class HomeController {
 		}
 		else {
 			// create model and view
-			modelAndView = new ModelAndView("error.html");
+			modelAndView = new ModelAndView("upload.html");
+			
+			// set to 1 to indicate an error
+			uploadResultCode = 1;
+			
+			// add the current operation result.
+			modelAndView.addObject("uploadResultCode", uploadResultCode);
 			
 			// ajouter dans le model l'erreur pour affichage dans la page HTML
 			modelAndView.addObject("errorMessage", OperationsResults.getResult().getTxtType());

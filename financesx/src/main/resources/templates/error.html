@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 <head>
 	<meta charset="utf-8">
@@ -20,5 +20,14 @@
 			</tr>
 		</table>
 	</div>
+	
+	<script type="text/javascript" th:inline="javascript">
+	var message = "Message d'erreurX: " + /*[[${errorMessage}]]*/ 'value';
+	
+	alert(message);
+	
+	</script>
+	
+	
 </body>
 </html>
