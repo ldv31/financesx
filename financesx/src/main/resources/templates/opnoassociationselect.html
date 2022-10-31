@@ -17,10 +17,10 @@
 	<!-- category update for an operation based on the operation unique identifier -->
 	<div>
 	  	<form name='f' th:object="${opCategoryObjectNoAsso}" method='POST' action="opnoassociationselect.html">
-	        <table>
+	        <table id="inputCategoryTable">
 	        	<tr>
 	                <td class="textintable4">
-	                	<label for="exampleFormControlInput1" class="form-label">Entrer l'identifiant de l'opération</label>
+	                	<label id="labelInput" for="exampleFormControlInput1" class="form-label">Entrer l'identifiant de l'opération</label>
 	                </td>	                	
 	                <td class="textintable4">
 	                	<input type="text" class="form-control" id="exampleFormControlInput1" placeholder="256" name="opIdTxt">    
@@ -45,7 +45,10 @@
 
 
 	<div>
-		<table class="table table-hover caption-top">		
+<!-- 	
+		<table id="infoTable" class="table caption-top"> 
+ -->	
+ 		<table id="infoTable" class="table table-hover caption-top"> 		
 			<caption class="captiontable1">Opérations sans associations</caption>
 			<tr style="background-color: #EEEEEE">
 			    <th>Date opération</th>
@@ -69,5 +72,9 @@
 			</tr>			
 		</table>
 	</div>
+	
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+	<script src="js/noassociations.js" charset="utf-8"></script>
+	
 </body>
 </html>
