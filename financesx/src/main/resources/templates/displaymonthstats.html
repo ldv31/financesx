@@ -33,6 +33,7 @@
 </div>
 
 
+
 <div class="mb-3">
 	<label class="form-label">Total des dépenses du mois (€) : </label> <label
 		class="form-label" th:text="${sum}"></label>
@@ -48,10 +49,14 @@
  <!-- 2. You can add print and export feature by adding this line -->
  <script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-
-
-
-<script th:inline="javascript" type="text/javascript">
+	<!-- limitation on the datapicker to current date-->
+	<script type="text/javascript">
+	var today = new Date().toJSON().slice(0, 10);
+	var date = $('#startDate');
+	date.attr('max', today);
+	</script>
+	
+	<script th:inline="javascript" type="text/javascript">
 	
 	<!-- A. Sommes des dépenses par categories -->
 	  jQuery(document).ready(function() {

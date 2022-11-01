@@ -48,7 +48,12 @@
  <!-- 2. You can add print and export feature by adding this line -->
  <script src="http://code.highcharts.com/modules/exporting.js"></script>
 
-
+	<!-- limitation on the datapicker to current date-->
+	<script type="text/javascript">
+	var today = new Date().toJSON().slice(0, 10);
+	var date = $('#startDate');
+	date.attr('max', today);
+	</script>
 
 
 <script th:inline="javascript" type="text/javascript">

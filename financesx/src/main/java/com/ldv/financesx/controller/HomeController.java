@@ -632,7 +632,7 @@ public class HomeController {
         }
         
         modelAndView.addObject("sum", (int)sum);
-        
+        modelAndView.addObject("selecteddate", LocalDate.now());
 		
         // Main return statement 
         return modelAndView;			
@@ -649,7 +649,7 @@ public class HomeController {
 			
 			double sum = 0;
 			
-			LocalDate selectedDate = LocalDate.parse(selectedDateString);
+			LocalDate selectedDate;
 			
 			// control log
 			LogManager.LOGGER.log(Level.INFO,"Date from datepicker (string): " + selectedDateString);
@@ -658,21 +658,31 @@ public class HomeController {
 			// create model and view
 			ModelAndView modelAndView = new ModelAndView("displaymonthstatsupdate.html");
 
-
-			//Intermediate datastore
-	        Map<String, Double> monthsStats = opStatsService.getMonthStats(selectedDate);
-	        
-	        modelAndView.addObject("keyMonthsStats", monthsStats.keySet());
-	        modelAndView.addObject("valuesMonthsStats", monthsStats.values());
 			
-	        for (Double sumCat: monthsStats.values()) {
-	        	sum+=sumCat;
-	        }
-	        
-	        modelAndView.addObject("sum", (int)sum);
-	        modelAndView.addObject("selecteddate", selectedDateString);
-	        
-		
+			if (!selectedDateString.isEmpty()) {
+				
+				// convert selected date string to localdate
+				selectedDate = LocalDate.parse(selectedDateString);
+				
+				//Intermediate datastore
+		        Map<String, Double> monthsStats = opStatsService.getMonthStats(selectedDate);
+		        
+		        modelAndView.addObject("keyMonthsStats", monthsStats.keySet());
+		        modelAndView.addObject("valuesMonthsStats", monthsStats.values());
+				
+		        for (Double sumCat: monthsStats.values()) {
+		        	sum+=sumCat;
+		        }
+		        
+		        modelAndView.addObject("sum", (int)sum);
+		        modelAndView.addObject("selecteddate", selectedDateString);
+				
+			}
+			else {
+				modelAndView.addObject("sum", (int)0);
+		        modelAndView.addObject("selecteddate", "pas de date selectionnée");
+			}
+	
 	        // Main return statement 
 	        return modelAndView;			
 		}
