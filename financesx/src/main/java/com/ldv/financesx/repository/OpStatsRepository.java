@@ -5,10 +5,12 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.logging.Level;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import com.ldv.financesx.LogManager;
 import com.ldv.financesx.OperationStatistics;
 import com.ldv.financesx.OperationsResults;
 import com.ldv.financesx.model.CategoryType;
@@ -490,7 +492,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
     * @param month(LocalDate) to get the stats from.
     * @return List of expenses per categories for the month.
     */
-	public Map<String, Double> getMonthStats() {
+	public Map<String, Double> getMonthStats(LocalDate selectedDate) {
 		
 		// return data : categories and corresponding sums for expenses 
 		Map<String, Double> monthExpenses = new LinkedHashMap<String, Double>();
@@ -504,8 +506,12 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 					// récupérer la date selectionnée (dans date picker du pannel "Mois courant")
 					
 					// Todo : recupérer la date du date picker (dans la page HTML) et l'utiliser ici (au lieu d'utiliser la date courante)
-					LocalDate currentDate = LocalDate.now();
-									
+					LocalDate currentDate = selectedDate;
+					
+					// control log
+					LogManager.LOGGER.log(Level.INFO,"Date selectionné pour l'affichage du mois: " + currentDate);
+					
+					
 					// cherche dans l'historique de la catégorie s'il y a couple mois/année correspondant
 					for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
 						if ((currentDate.getMonth() == sDataHistory.getMonthAndYear().getMonth()) &&

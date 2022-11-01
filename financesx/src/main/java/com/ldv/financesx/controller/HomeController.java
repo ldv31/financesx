@@ -1,5 +1,6 @@
 package com.ldv.financesx.controller;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -621,7 +622,7 @@ public class HomeController {
 		ModelAndView modelAndView = new ModelAndView("displaymonthstats.html");
 					
 		//Intermediate datastore
-        Map<String, Double> monthsStats = opStatsService.getMonthStats();
+        Map<String, Double> monthsStats = opStatsService.getMonthStats(LocalDate.now());
         
         modelAndView.addObject("keyMonthsStats", monthsStats.keySet());
         modelAndView.addObject("valuesMonthsStats", monthsStats.values());
@@ -636,6 +637,45 @@ public class HomeController {
         // Main return statement 
         return modelAndView;			
 	}
+	
+
+	
+	/* display of the expenses per categories for a specific month after selecting a new date .
+	    * @param month(LocalDate) to get the stats from.
+	    * @return List of expenses per categories for the month.
+	    */
+		@RequestMapping(value ={"/displaymonthstatsupdate.html"})
+		public ModelAndView displaymonthstatsupdate(@RequestParam("startDate") String selectedDateString, Model model) {
+			
+			double sum = 0;
+			
+			LocalDate selectedDate = LocalDate.parse(selectedDateString);
+			
+			// control log
+			LogManager.LOGGER.log(Level.INFO,"Date from datepicker (string): " + selectedDateString);
+			LogManager.LOGGER.log(Level.INFO,"Date from datepicker (LocalDate): " + selectedDateString);
+			
+			// create model and view
+			ModelAndView modelAndView = new ModelAndView("displaymonthstatsupdate.html");
+
+
+			//Intermediate datastore
+	        Map<String, Double> monthsStats = opStatsService.getMonthStats(selectedDate);
+	        
+	        modelAndView.addObject("keyMonthsStats", monthsStats.keySet());
+	        modelAndView.addObject("valuesMonthsStats", monthsStats.values());
+			
+	        for (Double sumCat: monthsStats.values()) {
+	        	sum+=sumCat;
+	        }
+	        
+	        modelAndView.addObject("sum", (int)sum);
+	        modelAndView.addObject("selecteddate", selectedDateString);
+	        
+		
+	        // Main return statement 
+	        return modelAndView;			
+		}
 	
 	
 	

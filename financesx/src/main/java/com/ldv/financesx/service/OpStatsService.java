@@ -1,5 +1,6 @@
 package com.ldv.financesx.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Map;
 
@@ -206,8 +207,8 @@ public class OpStatsService {
     * @param month(LocalDate) to get the stats from.
     * @return List of expenses per categories for the month.
     */
-	public Map<String, Double> getMonthStats() {
-		return opStatsRepository.getMonthStats();
+	public Map<String, Double> getMonthStats(LocalDate selectedDate) {
+		return opStatsRepository.getMonthStats(selectedDate);
 	}
 	
 	
