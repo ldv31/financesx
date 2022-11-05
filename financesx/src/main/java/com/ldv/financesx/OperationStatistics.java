@@ -104,8 +104,6 @@ public class OperationStatistics implements OpStatInterface {
 				loopDate = loopDate.minus(1,ChronoUnit.MONTHS);
 			}
 				
-			//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>: " + lCategory.getName());
-			//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>: " + CategoriesList.ALIMENTATION_HYGIENE.getTxtType());
 			
 			// For category/budget "Alimentation et Hygiène" create the list of operators
 			// check if the category is "Alimentation et Hygiène"
@@ -155,17 +153,10 @@ public class OperationStatistics implements OpStatInterface {
 					if (op.getAssociation().equals(CategoriesList.ALIMENTATION_HYGIENE.getTxtType())) {
 						// loop on operators
 						for (OperatorStats localOperatorStats: lStat.get(0).getOperatorStats()) {
-							//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> operator- :" + localOperatorStats.getName());
-							//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> operation :" + op.getLibelle());
-							// check if operator name corresponds to operation operator name, if yes, add value
 							if (op.getLibelle().contains(localOperatorStats.getName())) {
 								localOperatorStats.addToSum(op.getDebit());
-								//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajout :  " + op.getLibelle());
-								//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajout :  " + localOperatorStats.getName());
-								//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ajout :  " + op.getDebit());
 							}						
 						}
-						//System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> somme : " + lStat.get(0).getOperatorStats().get(1).getConsolidatedSum());
 					}
 				}
 				

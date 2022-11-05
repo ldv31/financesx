@@ -193,9 +193,6 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	
 	
 	
-	
-	
-	
 	// Get Gains and losses data from database
 	public ArrayList<GlobalStatsDataType> getGainsandlosses () {
 		
@@ -213,6 +210,35 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		
 		return gainsandlosses;	
 	}
+	
+	
+
+	/**
+    * Return cummulative Gains and losses data from database.
+    * @param None.
+    * @return cummulative Gains and losses per month.
+    */	
+	public ArrayList<GlobalStatsDataType> getGainsandlossesSum () {
+		
+		ArrayList<GlobalStatsDataType> gainsandlosses = new ArrayList<GlobalStatsDataType>();
+		
+		Double cummulativeValue = 0.0;
+		
+		// ....
+		StatType1 lOpStat = opStats.getlStatGlobal().get(0);
+							
+		for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
+			
+			cummulativeValue+=sDataHistory.getValue();
+			
+			GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(sDataHistory.getMonthAndYearShort(), cummulativeValue);
+							
+			gainsandlosses.add(globalStatsDataType);								
+		}
+		
+		return gainsandlosses;	
+	}
+	
 	
 	
 	// Get budget data from database
@@ -397,25 +423,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		
 		GlobalInfo globalInfo = new GlobalInfo(opStats);
 				
-		return globalInfo;
-		
-		/*
-		// Affichage des statistiques : période d'analyse, nombre d'opérations sans association, valeur des opérations sans associations 
-		DateTimeFormatter datePattern = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-		LocalDate StartDate = opStats.getOpBook().getOperationBookStats().getStartOperationDate();
-		LocalDate EndDate = opStats.getOpBook().getOperationBookStats().getEndOperationDate();
-		
-		String rValue = " INFORMATION GLOBALES => " 
-				+ " Date de début: " + StartDate.format(datePattern) 
-				+ " / Date de fin:  " + EndDate.format(datePattern)
-				+ " => Durée d'analyse : " + Integer.toString(opStats.getHistoryDaylength()) 
-				+ " jours" + " ( " + String.format("%.1f", opStats.getHistoryMonthlength()/12) + " années)    " + " => Opérations sans association : " + opStats.getNumberOfOpWithoutAssociation()
-				+ "  => Débit sans association : " + (int)opStats.getSumValueDebit()
-				+ "€"
-				+ "  => Crédit sans association : " + (int)opStats.getSumValueCredit()
-				+ "€";
-		*/
-							
+		return globalInfo;							
 	}
 	
 	
@@ -509,7 +517,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 					LocalDate currentDate = selectedDate;
 					
 					// control log
-					LogManager.LOGGER.log(Level.INFO,"Date selectionné pour l'affichage du mois: " + currentDate);
+					LogManager.LOGGER.log(Level.FINE,"Date selectionné pour l'affichage du mois: " + currentDate);
 					
 					
 					// cherche dans l'historique de la catégorie s'il y a couple mois/année correspondant

@@ -40,7 +40,7 @@ public class LoggerAspect {
 
     @AfterReturning(value = "execution(* com.ldv.financesx.*.*(..))",returning = "retVal")
     public void logStatus(JoinPoint joinPoint,Object retVal) {
-        logger.log(Level.INFO,joinPoint.getSignature()+ " Method successfully processed with the status " +
+        logger.log(Level.FINE,joinPoint.getSignature()+ " Method successfully processed with the status " +
                 retVal.toString());
     }
   */

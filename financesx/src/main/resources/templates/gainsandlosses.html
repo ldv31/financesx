@@ -28,7 +28,7 @@
 	        backgroundColor:'white'
 	    },
 	    title: {
-	        text: 'Gaines et pertes par mois',
+	        text: 'Gaines et pertes par mois (épargne non décomptée)',
 	        style: {
 	            color: 'black',
 	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
@@ -76,7 +76,7 @@
 	    
 	    
 	    series: [{
-	        name: 'Gains et pertes mensuelles',
+	        name: 'Gains et pertes par mois',
 	       data: [[${valuesGainsandlosses}]]
 	    }]
 		});
@@ -85,13 +85,79 @@
 	  	  
 	 
 	 
+	  <!-- A. Sommes des dépenses par categories -->
+	  jQuery(document).ready(function() { 
+	 Highcharts.chart('container2', {
+	    chart: {
+	        type: 'column',
+	        backgroundColor:'white'
+	    },
+	    title: {
+	        text: 'Gaines et pertes par mois (épargne non décomptée) - Cummulatif',
+	        style: {
+	            color: 'black',
+	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
+	         }
+	    },
+	    
+	    xAxis: {
+	        categories: [[${keySetGainsandlossesSum}]],
+		    labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	    },
+	    
+	    
+	    yAxis: {
+	        title: {
+	          text: '€'
+	        },
+	        labels: {
+	            style: {
+	                color: 'black',
+	                fontSize:'15px'
+	            }
+        	}
+	      },
+	    
+	    plotOptions: {
+	    	area: {
+	            fillColor: {
+	                pattern: {
+	                    path: {
+	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+	                        strokeWidth: 3
+	                    },
+	                    width: 10,
+	                    height: 10,
+	                    opacity: 0.4
+	                }
+	            }
+	        }
+	    },
+	    
+	    
+	    series: [{
+	        name: 'Gains et pertes par mois (cummulatif)',
+	       data: [[${valuesGainsandlossesSum}]]
+	    }]
+		});
+	});
+	  
+	  
 	 
 	  
  </script>
  
   <!-- 3. Add the container -->
   <div id="container1" class="graph1" style="width:100%; height:800px;"></div>
-  <div class="div-1" style="width:100%; height:60px;"></div>
+  <div class="div-1" style="width:100%; height:20px;"></div>
+  
+  <div id="container2" class="graph1" style="width:100%; height:800px;"></div>
+  <div class="div-1" style="width:100%; height:20px;"></div>
   
  
  <!-- footer block -->

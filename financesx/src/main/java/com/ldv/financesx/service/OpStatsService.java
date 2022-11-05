@@ -79,7 +79,21 @@ public class OpStatsService {
 	    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getGainsandlosses();
 	    	   	  	        
 	    	return globalStatsDataList;	
-		}
+	}
+	
+	
+	/**
+    * Return cummulative Gains and losses data from database.
+    * @param None.
+    * @return cummulative Gains and losses per month.
+    */	
+	public ArrayList<GlobalStatsDataType> getGainsandlossesSum () {
+    	
+    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getGainsandlossesSum();
+    	   	  	        
+    	return globalStatsDataList;	
+	}
+	
 	
 	public ArrayList<GlobalStatsDataType> getBudget () {
     	

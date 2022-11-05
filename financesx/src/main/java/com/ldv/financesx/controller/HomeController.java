@@ -125,7 +125,7 @@ public class HomeController {
 	public ModelAndView displayStatsHistory(Model model) {
 	
 		// for debug 
-		LogManager.LOGGER.log(Level.INFO,"execution of /displayStatsHistory.html ");
+		LogManager.LOGGER.log(Level.FINE,"execution of /displayStatsHistory.html ");
 
 		
 		// create model and view
@@ -140,8 +140,8 @@ public class HomeController {
 		opCategoryObject.setType(CategoryType.TOUS);
 		model.addAttribute("opCategoryObject", opCategoryObject);
 	
-		LogManager.LOGGER.log(Level.INFO,"Category object: " + opCategoryObject + "  Category : " + opCategoryObject.getName());
-		LogManager.LOGGER.log(Level.INFO,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObject.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object: " + opCategoryObject + "  Category : " + opCategoryObject.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObject.getName());
 		
 		// Add the global stats for sum of expenses per categories
 		ArrayList<GlobalStatsDataType> categoryHistory = opStatsService.getCategoryHistory(opCategorieUserChoice).getCategoryHistory();	
@@ -181,12 +181,12 @@ public class HomeController {
 	@RequestMapping(value ={"/historystatsselect.html"}, method = RequestMethod.POST)
 	public ModelAndView displayStatsHistorySelect(@ModelAttribute("opCategoryObject") OperationCategory opCategoryObject, Model model) {
 			
-		LogManager.LOGGER.log(Level.INFO,"Category object after select: " + opCategoryObject);
+		LogManager.LOGGER.log(Level.FINE,"Category object after select: " + opCategoryObject);
 		
 		OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObject");
-		LogManager.LOGGER.log(Level.INFO,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
 		
-		LogManager.LOGGER.log(Level.INFO,"execution of /historystatsselect.html + category name : " + opCategoryObject.getName());
+		LogManager.LOGGER.log(Level.FINE,"execution of /historystatsselect.html + category name : " + opCategoryObject.getName());
 
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("historystatsselect.html");
@@ -236,11 +236,15 @@ public class HomeController {
 		
 		// Add the gains / losses  stats
 		ArrayList<GlobalStatsDataType> gainsandlosses = opStatsService.getGainsandlosses();
-        modelAndView.addObject("gainsandlosses", gainsandlosses);
+        
+        // Add the gains / losses  stats
+ 		ArrayList<GlobalStatsDataType> gainsandlossesSum = opStatsService.getGainsandlossesSum();
         
         //Intermediate datastore
         Map<String, Double> dataGainsandlosses = new LinkedHashMap<String, Double>();
         
+        //Intermediate datastore
+        Map<String, Double> dataGainsandlossesSum = new LinkedHashMap<String, Double>();
         
         for (GlobalStatsDataType stat : gainsandlosses) {
         	dataGainsandlosses.put(stat.getIndex(), stat.getOpValue());
@@ -248,6 +252,13 @@ public class HomeController {
         modelAndView.addObject("keySetGainsandlosses", dataGainsandlosses.keySet());
         modelAndView.addObject("valuesGainsandlosses", dataGainsandlosses.values());
 	
+        for (GlobalStatsDataType stat : gainsandlossesSum) {
+        	dataGainsandlossesSum.put(stat.getIndex(), stat.getOpValue());
+    	}
+        modelAndView.addObject("keySetGainsandlossesSum", dataGainsandlossesSum.keySet());
+        modelAndView.addObject("valuesGainsandlossesSum", dataGainsandlossesSum.values());
+        
+        
         // Main return statement 
         return modelAndView;
         
@@ -392,7 +403,7 @@ public class HomeController {
 		ArrayList<Operation> opBookAddedData;
 		
 			
-		LogManager.LOGGER.log(Level.INFO,"Upload file path: " + uploadfilepath);
+		LogManager.LOGGER.log(Level.FINE,"Upload file path: " + uploadfilepath);
 		
 		String uploadFilePathFrompModel = (String)model.getAttribute("uploadfilepath");
 		
@@ -414,7 +425,7 @@ public class HomeController {
 			// ajouter dans le model le nombre d'opérations ajoutées pour affichage dans la page HTML
 			modelAndView.addObject("uploadoperationsize", opBookAddedData.size());
 			
-			LogManager.LOGGER.log(Level.INFO, "HomeController => size of new data array :" + opBookAddedData.size());
+			LogManager.LOGGER.log(Level.FINE, "HomeController => size of new data array :" + opBookAddedData.size());
 			
 			// sauvegarde du fichier des opérations avec les nouvelles mises à jour
 			saveFileResult = opStatsService.saveFinance();
@@ -469,10 +480,10 @@ public class HomeController {
 		
 	
 	
-		LogManager.LOGGER.log(Level.INFO,"Category object: " + opCategoryObjectNoAsso + "  Category : " + opCategoryObjectNoAsso.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object: " + opCategoryObjectNoAsso + "  Category : " + opCategoryObjectNoAsso.getName());
 		
 		
-		LogManager.LOGGER.log(Level.INFO,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObjectNoAsso.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObjectNoAsso.getName());
 		
 					
 		opBookDataWithoutAssociation = opStatsService.getOpWithoutAssociation();
@@ -507,15 +518,15 @@ public class HomeController {
 		// operation to update (if found)
 		Operation opUpdate = null;
 		
-		LogManager.LOGGER.log(Level.INFO,"Category object after select: " + opCategoryObjectNoAsso);
+		LogManager.LOGGER.log(Level.FINE,"Category object after select: " + opCategoryObjectNoAsso);
 		
 		OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObjectNoAsso");
-		LogManager.LOGGER.log(Level.INFO,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
 		
-		LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html + category name : " + opCategoryObjectNoAsso.getName());
+		LogManager.LOGGER.log(Level.FINE,"execution of /opnoassociationselect.html + category name : " + opCategoryObjectNoAsso.getName());
 
 		
-		LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html + opeeration ID : " + opIdTxt);
+		LogManager.LOGGER.log(Level.FINE,"execution of /opnoassociationselect.html + opeeration ID : " + opIdTxt);
 		
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("opnoassociationselect.html");
@@ -532,7 +543,7 @@ public class HomeController {
 			// search for the operation corresponding to the operation id provided by the user
 			for (Operation op : opBookDataWithoutAssociation) {
 				if (op.getOpId() == opId) {
-					LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html + Libellé opération  : " + op);
+					LogManager.LOGGER.log(Level.FINE,"execution of /opnoassociationselect.html + Libellé opération  : " + op);
 					opUpdate = op;			
 				}
 			}
@@ -540,7 +551,7 @@ public class HomeController {
 		
 		// update operation and save or return error
 		if (opUpdate != null) {
-			LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html => changing association mode from  "
+			LogManager.LOGGER.log(Level.FINE,"execution of /opnoassociationselect.html => changing association mode from  "
 					+ opUpdate.getAssociation() + " to " + opCategoryObjectNoAsso.getName());
 			
 			// update operation
@@ -561,7 +572,7 @@ public class HomeController {
 			resultMessage = "Mise à jour de la catégorie : " + opUpdate.getAssociation() + " réussie pour l' opération : " + opUpdate;
 			
 		} else  { // error
-			LogManager.LOGGER.log(Level.INFO,"execution of /opnoassociationselect.html => error => opid not found : " + opId);
+			LogManager.LOGGER.log(Level.FINE,"execution of /opnoassociationselect.html => error => opid not found : " + opId);
 			resultMessage = "Identifiant invalid ou non précisé";
 		}
 		
@@ -652,8 +663,8 @@ public class HomeController {
 			LocalDate selectedDate;
 			
 			// control log
-			LogManager.LOGGER.log(Level.INFO,"Date from datepicker (string): " + selectedDateString);
-			LogManager.LOGGER.log(Level.INFO,"Date from datepicker (LocalDate): " + selectedDateString);
+			LogManager.LOGGER.log(Level.FINE,"Date from datepicker (string): " + selectedDateString);
+			LogManager.LOGGER.log(Level.FINE,"Date from datepicker (LocalDate): " + selectedDateString);
 			
 			// create model and view
 			ModelAndView modelAndView = new ModelAndView("displaymonthstatsupdate.html");
@@ -732,10 +743,10 @@ public class HomeController {
 		
 	
 	
-		LogManager.LOGGER.log(Level.INFO,"Category object: " + opCategoryObjectAmazon + "  Category : " + opCategoryObjectAmazon.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object: " + opCategoryObjectAmazon + "  Category : " + opCategoryObjectAmazon.getName());
 		
 		
-		LogManager.LOGGER.log(Level.INFO,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObjectAmazon.getName());
+		LogManager.LOGGER.log(Level.FINE,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObjectAmazon.getName());
 		
 		
 		
@@ -774,15 +785,15 @@ public class HomeController {
 		// operation to update (if found)
 		Operation opUpdate = null;
 				
-			LogManager.LOGGER.log(Level.INFO,"Category object after select: " + opCategoryObjectAmazon);
+			LogManager.LOGGER.log(Level.FINE,"Category object after select: " + opCategoryObjectAmazon);
 			
 			OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObjectAmazon");
-			LogManager.LOGGER.log(Level.INFO,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
+			LogManager.LOGGER.log(Level.FINE,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
 			
-			LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html + category name : " + opCategoryObjectAmazon.getName());
+			LogManager.LOGGER.log(Level.FINE,"execution of /displayopamazonselect.html + category name : " + opCategoryObjectAmazon.getName());
 
 			
-			LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html + opeeration ID : " + opIdTxt);
+			LogManager.LOGGER.log(Level.FINE,"execution of /displayopamazonselect.html + opeeration ID : " + opIdTxt);
 			
 			// create model and view
 			ModelAndView modelAndView = new ModelAndView("displayopamazonselect.html");
@@ -799,7 +810,7 @@ public class HomeController {
 				// search for the operation corresponding to the operation id provided by the user
 				for (Operation op : opBookDataAmazon) {
 					if (op.getOpId() == opId) {
-						LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html + Libellé opération  : " + op);
+						LogManager.LOGGER.log(Level.FINE,"execution of /displayopamazonselect.html + Libellé opération  : " + op);
 						opUpdate = op;			
 					}
 				}
@@ -807,7 +818,7 @@ public class HomeController {
 			
 			// update operation and save or return error
 			if (opUpdate != null) {
-				LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html => changing association mode from  "
+				LogManager.LOGGER.log(Level.FINE,"execution of /displayopamazonselect.html => changing association mode from  "
 						+ opUpdate.getAssociation() + " to " + opCategoryObjectAmazon.getName());
 				
 				// update operation
@@ -828,7 +839,7 @@ public class HomeController {
 				resultMessage = "Mise à jour de la catégorie : " + opUpdate.getAssociation() + " réussie pour l' opération : " + opUpdate;
 				
 			} else  { // error
-				LogManager.LOGGER.log(Level.INFO,"execution of /displayopamazonselect.html => error => opid not found : " + opId);
+				LogManager.LOGGER.log(Level.FINE,"execution of /displayopamazonselect.html => error => opid not found : " + opId);
 				resultMessage = "Identifiant invalid ou non précisé";
 			}
 			

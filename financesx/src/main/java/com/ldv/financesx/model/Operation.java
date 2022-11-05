@@ -60,7 +60,7 @@ public class Operation {
 			lCategoryType  = CategoryType.DEBIT;
 		
 		
-		LogManager.LOGGER.log(Level.INFO,"Category object after select: " + this);
+		LogManager.LOGGER.log(Level.FINE,"Category object after select: " + this);
 	}
 	
 	

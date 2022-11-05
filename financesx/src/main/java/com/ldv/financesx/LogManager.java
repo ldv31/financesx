@@ -10,7 +10,8 @@ import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
-
+//import org.apache.logging.log4j.LogManager;
+//import org.apache.logging.log4j.Logger;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Value;
@@ -27,6 +28,8 @@ public class LogManager {
 	
 	// Creation of the logger object
 	public static final Logger LOGGER = Logger.getLogger(LogManager.class.getName());
+	//private static final Logger LOGGER = LogManager.getLogger(LogManager.class.getName());
+	
 	
 	@PostConstruct
 	public void setupLogs () {

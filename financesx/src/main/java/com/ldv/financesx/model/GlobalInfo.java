@@ -24,6 +24,7 @@ public class GlobalInfo {
 	private final String debitWithoutAssociationTxt = "Débit sans association (€)";
 	private final String creditWithoutAssociationTxt = "Crédit sans association (€)";
 	private final String operationsNumberTxt = "Nombre d'opérations";
+	private final String operationsWithErrorNumberTxt = "Nombre d'opérations en erreur (à la lecture)";
 
 	// data for reporting info
 	private LocalDate startDate;  
@@ -32,6 +33,8 @@ public class GlobalInfo {
 	private int debitWithoutAssociation;
 	private int creditWithoutAssociation;
 	private int operationsNumber;
+	private int operationsWithErrorNumber;
+	
 	
 	
 	// this constructor call the function that fills global info data
@@ -56,6 +59,7 @@ public class GlobalInfo {
 		debitWithoutAssociation = (int)opStats.getSumValueDebit();
 		creditWithoutAssociation = (int)opStats.getSumValueCredit();
 		operationsNumber = opStats.getOpBook().getaString().size();
+		operationsWithErrorNumber = opStats.getOpBook().getOperationsWithError().size();
 	}
 
 
@@ -156,6 +160,23 @@ public class GlobalInfo {
 
 	public String getOperationsNumberTxt() {
 		return operationsNumberTxt;
+	}
+
+
+	public int getOperationsWithErrorNumber() {
+		return operationsWithErrorNumber;
+	}
+
+
+	public void setOperationsWithErrorNumber(int operationsWithErrorNumber) {
+		this.operationsWithErrorNumber = operationsWithErrorNumber;
+	}
+
+
+	public String getOperationsWithErrorNumberTxt() {
+		return operationsWithErrorNumberTxt;
 	}	
 
+	
+	
 }

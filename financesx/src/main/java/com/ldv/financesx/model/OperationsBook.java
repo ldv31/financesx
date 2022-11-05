@@ -55,6 +55,9 @@ public class OperationsBook implements FileMgtInterface {
 	ArrayList<String[]> categoriesString;
 	ArrayList<Operation> opBookData;
 	
+	// store the list of operation with errors (missing element in the operation)
+	ArrayList<String[]> operationsWithError = new ArrayList<String[]>();
+	
 	// list of operations without association
 	ArrayList<Operation> opBookDataWithoutAssociation;
 	ArrayList<OperationCategory> categoriesList = new ArrayList<OperationCategory>();
@@ -243,7 +246,7 @@ public class OperationsBook implements FileMgtInterface {
 				e.printStackTrace();
 			}
 	
-			LogManager.LOGGER.log(Level.INFO, "size of new data array :" + opBookNewData.size());
+			LogManager.LOGGER.log(Level.FINE, "size of new data array :" + opBookNewData.size());
 	
 			// index of insertion
 			int insertIndex = 0;
@@ -292,7 +295,6 @@ public class OperationsBook implements FileMgtInterface {
 	
 			// Mise a jour des association dans le livre de compte
 			fillAssociationBookData();
-			System.out.println("fillAssociationBookData updated");
 			LogManager.LOGGER.log(Level.INFO, "fillAssociationBookData updated");	
 			
 			// return the list of operation to be printed
@@ -382,11 +384,15 @@ public class OperationsBook implements FileMgtInterface {
 	private void fillOperationBookData(ArrayList<String[]> inputString, ArrayList<Operation> inputBookData,
 			OperationBookStats operationBookStats) throws ParseException {
 		boolean csvHeader = true;
-		double lCredit;
+		double lCredit = 0;
+		double lDebit = 0;
 		AssociationMode localMode = AssociationMode.NONE;
 		// String lassociation = "Aucune";
 		String lassociation = CategoriesList.AUCUNE.toString();
 
+		// count the lines in the file, used to identify the lines with error
+		int lineCounter = 1;
+		
 		for (String[] lString : inputString) {
 			// Ignorer le header présent dans le fichier CSV
 			if (csvHeader == false) {
@@ -400,81 +406,112 @@ public class OperationsBook implements FileMgtInterface {
 				// 6 - association (optionnel)
 				// 7 - mode d'association (optionnel)
 
-				// Renseigner le Mode d'association si disponible
-				if (lString.length >= 7)
-					if (AssociationMode.fromString(lString[6]) != null)
-						localMode = AssociationMode.fromString(lString[6]);
-					else
-						localMode = AssociationMode.NONE;
-				else
-					localMode = AssociationMode.NONE;
-
-				// Renseigner l"association si disponible
-				if (lString.length >= 6) {
-					lassociation = lString[5];
+				
+				
+				// Process only if : 
+				//    - lString.length >= 4 (at least  dates + libelle + débit are provided) => CVS file or update
+				//			- 1 to 3 do not provide enought information no credit nor debit
+				//			- 4 is for update with debit
+				//			- 5 is for update with credit
+				//			- 6 is not possible (error case), see below
+				//			- 7 is for finance CVS file 
+				// 		- and lString.length != 6. This is an error in between update and CVS finance files
+				// if not, add the line to the error table an move to the next one
+				// the operation with error can by displayed in the IHM
+				if ((lString.length >= 4) && (lString.length != 6)){
+									
+					// case of reading of CVS file a line does  have 7  
+					if (lString.length == 7){
+						// Renseigner le Mode d'association
+						if (AssociationMode.fromString(lString[6]) != null)
+							localMode = AssociationMode.fromString(lString[6]);
+						else
+							localMode = AssociationMode.NONE;
+						
+						// Renseigner l"association
+						lassociation = lString[5];	
+						
+						// update the credit value
+						lCredit = lString[4].isEmpty() ? 0 : Double.parseDouble(lString[4].replaceAll(",", "."));					
+						
+					}
+						
+					// case of reading of update files
+					if (lString.length == 5){
+						// nothing to do for localMode and lassociation, we rely on default values for localMode and lassociation
+						
+						// update the credit value
+						lCredit = lString[4].isEmpty() ? 0 : Double.parseDouble(lString[4].replaceAll(",", "."));
+					}
+					
+														
+					// get the expense value applicable to CSV file and update
+					lDebit = lString[3].isEmpty() ? 0 : Double.parseDouble(lString[3].replaceAll(",", "."));
+														
+					Operation op = new Operation(lString[0], lString[1], lString[2], lDebit, lCredit,
+							lassociation, localMode);
+					inputBookData.add(op);
+	
+					// identifier les dates mini et maxi des opération.
+					// date mini
+					LocalDate dateOp = LocalDate.parse(lString[1], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	
+					if (operationBookStats.getStartOperationDate() == null) {
+						operationBookStats.setStartOperationDate(dateOp);
+					}
+	
+					int result = operationBookStats.getStartOperationDate().compareTo(dateOp);
+	
+					if (result == 0) {
+						// nothing to be done dates are equals
+					} else if (result > 0) {
+						// startOperationDate is after operation date
+						operationBookStats.setStartOperationDate(dateOp);
+						// System.out.println("startOperationDate =============> " +
+						// operationBookStats.getStartOperationDate());
+					} else if (result < 0) {
+						// startOperationDate is before operation date nothing to do
+					} else {
+						System.out.println("How to get here?");
+					}
+	
+					// date maxi
+					LocalDate dateOpMax = LocalDate.parse(lString[1], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+	
+					if (operationBookStats.getEndOperationDate() == null) {
+						operationBookStats.setEndOperationDate(dateOpMax);
+					}
+	
+					int resultMax = operationBookStats.getEndOperationDate().compareTo(dateOpMax);
+	
+					if (resultMax == 0) {
+						// nothing to be done dates are equals
+					} else if (resultMax > 0) {
+						// startOperationDate is after operation date nothing to do
+					} else if (resultMax < 0) {
+						// startOperationDate is before operation date nothing to do
+						operationBookStats.setEndOperationDate(dateOpMax);
+						// System.out.println("startOperationDate =============> " +
+						// operationBookStats.getEndOperationDate());
+					} else {
+						System.out.println("How to get here?");
+					}
 				} else {
-					// lassociation = "Aucune";
-					lassociation = CategoriesList.AUCUNE.toString();
+					
+					// add the line in error for potential later display
+					operationsWithError.add(lString);
+					
+					// log the error with line number and content
+					String delimiter = ";";
+					LogManager.LOGGER.log(Level.SEVERE, "Error Reading CVS file in line:  " 
+					+ lineCounter + " with content : " +  String.join(delimiter, lString));
 				}
-
-				// Cas ou le credit / debit est vide dans le fichier CSV
-				if (lString.length < 5)
-					lCredit = 0;
-				else
-					lCredit = lString[4].isEmpty() ? 0 : Double.parseDouble(lString[4].replaceAll(",", "."));
-
-				Operation op = new Operation(lString[0], lString[1], lString[2],
-						lString[3].isEmpty() ? 0 : Double.parseDouble(lString[3].replaceAll(",", ".")), lCredit,
-						lassociation, localMode);
-				inputBookData.add(op);
-
-				// identifier les dates mini et maxi des opération.
-				// date mini
-				LocalDate dateOp = LocalDate.parse(lString[1], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-				if (operationBookStats.getStartOperationDate() == null) {
-					operationBookStats.setStartOperationDate(dateOp);
-				}
-
-				int result = operationBookStats.getStartOperationDate().compareTo(dateOp);
-
-				if (result == 0) {
-					// nothing to be done dates are equals
-				} else if (result > 0) {
-					// startOperationDate is after operation date
-					operationBookStats.setStartOperationDate(dateOp);
-					// System.out.println("startOperationDate =============> " +
-					// operationBookStats.getStartOperationDate());
-				} else if (result < 0) {
-					// startOperationDate is before operation date nothing to do
-				} else {
-					System.out.println("How to get here?");
-				}
-
-				// date maxi
-				LocalDate dateOpMax = LocalDate.parse(lString[1], DateTimeFormatter.ofPattern("dd/MM/yyyy"));
-
-				if (operationBookStats.getEndOperationDate() == null) {
-					operationBookStats.setEndOperationDate(dateOpMax);
-				}
-
-				int resultMax = operationBookStats.getEndOperationDate().compareTo(dateOpMax);
-
-				if (resultMax == 0) {
-					// nothing to be done dates are equals
-				} else if (resultMax > 0) {
-					// startOperationDate is after operation date nothing to do
-				} else if (resultMax < 0) {
-					// startOperationDate is before operation date nothing to do
-					operationBookStats.setEndOperationDate(dateOpMax);
-					// System.out.println("startOperationDate =============> " +
-					// operationBookStats.getEndOperationDate());
-				} else {
-					System.out.println("How to get here?");
-				}
-
+				
 			} else
 				csvHeader = false;
+			
+			// increase the line counter (used to identify the lines with errors)
+			lineCounter++;
 		}
 	}
 
@@ -612,6 +649,15 @@ public class OperationsBook implements FileMgtInterface {
 
 	public void setOperationBookStats(OperationBookStats operationBookStats) {
 		this.operationBookStats = operationBookStats;
+	}
+
+	
+	public ArrayList<String[]> getOperationsWithError() {
+		return operationsWithError;
+	}
+
+	public void setOperationsWithError(ArrayList<String[]> operationsWithError) {
+		this.operationsWithError = operationsWithError;
 	}
 
 	@Override
