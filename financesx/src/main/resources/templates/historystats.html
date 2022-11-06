@@ -24,13 +24,15 @@
     <!-- 2. You can add print and export feature by adding this line -->
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
     
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    
 	<script th:inline="javascript" type="text/javascript">
 	 
 	<!-- A. Sommes des dépenses par categories -->
 	  jQuery(document).ready(function() { 
 	 Highcharts.chart('container1', {
 	    chart: {
-	        type: 'column',
+	    	zoomType: 'xy',
 	        backgroundColor:'white'
 	    },
 	    title: {
@@ -59,6 +61,36 @@
 	        }
 	      },
 	    
+	      
+      yAxis: [{ // Primary yAxis
+    	    labels: {
+    	      format: '{value} €',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[1]
+    	      }
+    	    },
+    	    title: {
+    	      text: 'Moyenne mensuelle',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[1]
+    	      }
+    	    }
+    	  }, { // Secondary yAxis
+    	    title: {
+    	      text: 'Dépenses mensuelle',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[0]
+    	      }
+    	    },
+    	    labels: {
+    	      format: '{value} €',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[0]
+    	      }
+    	    },
+    	    opposite: true
+	    }],  
+	      
 	    plotOptions: {
 	    	area: {
 	            fillColor: {
@@ -77,12 +109,15 @@
 	    
 	    
 	    series: [{
-	        name: [[${CategoryName}]], 
-	       data: [[${valuesCategoryHistory}]]
+	       name: [[${CategoryName}]], 
+	       data: [[${valuesCategoryHistory}]],
+		   type: 'column',
+		   yAxis: 1
 	    },
 	    {
-	        name: [[${CategoryNameAverage}]], 
-	       data: [[${valuesCategoryHistoryAverage}]]
+	       name: [[${CategoryNameAverage}]], 
+	       data: [[${valuesCategoryHistoryAverage}]],
+	       type: 'spline',
 	    }]
 	  });
 	});
