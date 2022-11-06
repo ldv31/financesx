@@ -14,6 +14,10 @@
  	<!-- 1. Add JQuery and Highcharts in the head of your page -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
+     
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/export-data.js"></script> 
       
     <!-- 2. You can add print and export feature by adding this line -->
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
@@ -25,7 +29,14 @@
 	 Highcharts.chart('container1', {
 	    chart: {
 	        type: 'column',
-	        backgroundColor:'white'
+	        backgroundColor:'white',
+	        options3d: {
+	            enabled: true,
+	            alpha: 5,
+	            beta: 0,
+	            depth: 50,
+	            viewDistance: 50
+	        }
 	    },
 	    title: {
 	        text: 'Alimentation/Hygiène',
@@ -56,25 +67,15 @@
 	                fontSize:'15px'
 	            }
         	}
-	      },
-	    
-	    plotOptions: {
-	    	area: {
-	            fillColor: {
-	                pattern: {
-	                    path: {
-	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
-	                        strokeWidth: 3
-	                    },
-	                    width: 10,
-	                    height: 10,
-	                    opacity: 0.4
-	                }
-	            }
-	        }
 	    },
 	    
+	    plotOptions: {
+	      column: {
+    	      depth: 25
+    	    }
+	    },
 	    
+	        
 	    series: [{
 	        name: 'Magasins',
 	       data: [[${valuesFoodSumPerOperator}]]

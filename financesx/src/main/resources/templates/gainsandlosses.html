@@ -14,19 +14,32 @@
  	<!-- 1. Add JQuery and Highcharts in the head of your page -->
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
+ 
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/export-data.js"></script> 
       
     <!-- 2. You can add print and export feature by adding this line -->
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+     <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     
 	<script th:inline="javascript" type="text/javascript">
 	 
 	<!-- A. Sommes des dépenses par categories -->
 	  jQuery(document).ready(function() { 
 	 Highcharts.chart('container1', {
-	    chart: {
-	        type: 'column',
-	        backgroundColor:'white'
-	    },
+		chart: {
+	    	zoomType: 'xy',
+	        backgroundColor:'white',
+	        options3d: {
+	            enabled: true,
+	            alpha: 5,
+	            beta: 0,
+	            depth: 50,
+	            viewDistance: 50
+	        }
+		},
 	    title: {
 	        text: 'Gains et pertes par mois (épargne non prise en compte)',
 	        style: {
@@ -46,17 +59,34 @@
 	    },
 	    
 	    
-	    yAxis: {
-	        title: {
-	          text: '€'
-	        },
-	        labels: {
-	            style: {
-	                color: 'black',
-	                fontSize:'15px'
-	            }
-        	}
-	      },
+	    yAxis: [{ // Primary yAxis
+    	    labels: {
+    	      format: '{value} €',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[1]
+    	      }
+    	    },
+    	    title: {
+    	      text: 'Gains et pertes moyennes par mois',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[1]
+    	      }
+    	    }
+    	  }, { // Secondary yAxis
+    	    title: {
+    	      text: 'Gains et pertes (cummulatif)',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[0]
+    	      }
+    	    },
+    	    labels: {
+    	      format: '{value} €',
+    	      style: {
+    	        color: Highcharts.getOptions().colors[0]
+    	      }
+    	    },
+    	    opposite: true
+	    }],  
 	    
 	    plotOptions: {
 	    	area: {
@@ -75,89 +105,29 @@
 	    },
 	    
 	    
+	    
 	    series: [{
-	        name: 'Gains et pertes par mois',
-	       data: [[${valuesGainsandlosses}]]
-	    }]
+		       name: 'Gains et pertes par mois', 
+		       data: [[${valuesGainsandlosses}]],
+			   type: 'column',
+			   yAxis: 1
+		    },
+		    {
+		       name: 'Gains et pertes par mois (cummulatif)',
+			   data: [[${valuesGainsandlossesSum}]],
+		       type: 'spline',
+		    }]
+ 
 		});
 	});
 	  
-	  	  
-	 
-	 
-	  <!-- A. Sommes des dépenses par categories -->
-	  jQuery(document).ready(function() { 
-	 Highcharts.chart('container2', {
-	    chart: {
-	        type: 'column',
-	        backgroundColor:'white'
-	    },
-	    title: {
-	        text: 'Gains et pertes par mois (épargne non prise en compte) - Cummulatif',
-	        style: {
-	            color: 'black',
-	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
-	         }
-	    },
-	    
-	    xAxis: {
-	        categories: [[${keySetGainsandlossesSum}]],
-		    labels: {
-	            style: {
-	                color: 'black',
-	                fontSize:'15px'
-	            }
-        	}
-	    },
-	    
-	    
-	    yAxis: {
-	        title: {
-	          text: '€'
-	        },
-	        labels: {
-	            style: {
-	                color: 'black',
-	                fontSize:'15px'
-	            }
-        	}
-	      },
-	    
-	    plotOptions: {
-	    	area: {
-	            fillColor: {
-	                pattern: {
-	                    path: {
-	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
-	                        strokeWidth: 3
-	                    },
-	                    width: 10,
-	                    height: 10,
-	                    opacity: 0.4
-	                }
-	            }
-	        }
-	    },
-	    
-	    
-	    series: [{
-	        name: 'Gains et pertes par mois (cummulatif)',
-	       data: [[${valuesGainsandlossesSum}]]
-	    }]
-		});
-	});
-	  
-	  
+  
 	 
 	  
  </script>
  
   <!-- 3. Add the container -->
   <div id="container1" class="graph1" style="width:100%; height:800px;"></div>
-  <div class="div-1" style="width:100%; height:20px;"></div>
-  
-  <div id="container2" class="graph1" style="width:100%; height:800px;"></div>
-  <div class="div-1" style="width:100%; height:20px;"></div>
   
  
  <!-- footer block -->
