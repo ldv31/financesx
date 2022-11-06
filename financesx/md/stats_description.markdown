@@ -40,3 +40,37 @@
 * Create per  a structure with all months from first operation date to last operation date 
 * Loop on all operations and add the operation expense or income to the appropriate month
 * Exclude operation from category "Epargne"
+
+
+&nbsp;
+##Budget Statistics
+###Description: 
+
+* Input data: all debit operations except "Epargne" (investment in EARL is still considered as the money is no longer available)
+* Sums the values of all incomes of a month
+* Provide the sum for each month
+* Provide also a cummulative view
+
+###Computation method:
+
+* Create per  a structure with all months from first operation date to last operation date 
+* Loop on all operations and add the operation expense to the appropriate month but do not include ("Epargne")
+* Exclude operation from category "Epargne"
+
+
+&nbsp;
+##Budget with reimbursement Statistics
+###Description: 
+
+* Input data: all debit operations except "Epargne" (investment in EARL is still considered as the money is no longer available) minus Reimbursement operation
+* Sums the values of all incomes minus the reimbursement of a month
+* Provide the sum for each month
+* Provide a cummulative view only
+
+###Computation method:
+
+* Create per a structure with all months from first operation date to last operation date 
+* Loop on all operations and add the operation expense minus the reimbursement operation to the appropriate month.
+* Exclude operation from category "Epargne"
+
+

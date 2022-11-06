@@ -2,7 +2,7 @@
 <html lang="fr" xmlns:th="http://www.thymeleaf.org">
 	<head>
 	    <meta charset="utf-8">
-	    <title>Gains et pertes</title>
+	    <title>Budget contraint</title>
 	    <link rel="stylesheet" href="css/styles.css">
 	    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
  	</head>
@@ -21,14 +21,14 @@
 	<script th:inline="javascript" type="text/javascript">
 	 
 	<!-- A. Sommes des dépenses par categories -->
-	  jQuery(document).ready(function() { 
+	 jQuery(document).ready(function() { 
 	 Highcharts.chart('container1', {
 	    chart: {
 	        type: 'column',
 	        backgroundColor:'white'
 	    },
 	    title: {
-	        text: 'Gains et pertes par mois (épargne non prise en compte)',
+	        text: 'Budget contraint',
 	        style: {
 	            color: 'black',
 	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
@@ -36,7 +36,7 @@
 	    },
 	    
 	    xAxis: {
-	        categories: [[${keySetGainsandlosses}]],
+	        categories: [[${keyFoodSumPerOperator}]],
 		    labels: {
 	            style: {
 	                color: 'black',
@@ -57,7 +57,8 @@
 	            }
         	}
 	      },
-	    
+
+/*
 	    plotOptions: {
 	    	area: {
 	            fillColor: {
@@ -73,91 +74,38 @@
 	            }
 	        }
 	    },
-	    
+*/	    
+		
+		
+		plotOptions: {
+		    column: {
+		      stacking: 'normal',
+	//	      dataLabels: {
+	//	        enabled: true
+	//	      }
+		    }
+		  },
 	    
 	    series: [{
-	        name: 'Gains et pertes par mois',
-	       data: [[${valuesGainsandlosses}]]
-	    }]
-		});
+	        name: 'Magasins',
+	       data: [[${valuesFoodSumPerOperator}]]
+	    }, {
+	        name: 'Toto',
+		   data: [[${valuesFoodSumPerOperator}]]
+		}]
+	});
 	});
 	  
 	  	  
 	 
 	 
-	  <!-- A. Sommes des dépenses par categories -->
-	  jQuery(document).ready(function() { 
-	 Highcharts.chart('container2', {
-	    chart: {
-	        type: 'column',
-	        backgroundColor:'white'
-	    },
-	    title: {
-	        text: 'Gains et pertes par mois (épargne non prise en compte) - Cummulatif',
-	        style: {
-	            color: 'black',
-	            font: 'bold 2rem "Trebuchet MS", Verdana, sans-serif'
-	         }
-	    },
-	    
-	    xAxis: {
-	        categories: [[${keySetGainsandlossesSum}]],
-		    labels: {
-	            style: {
-	                color: 'black',
-	                fontSize:'15px'
-	            }
-        	}
-	    },
-	    
-	    
-	    yAxis: {
-	        title: {
-	          text: '€'
-	        },
-	        labels: {
-	            style: {
-	                color: 'black',
-	                fontSize:'15px'
-	            }
-        	}
-	      },
-	    
-	    plotOptions: {
-	    	area: {
-	            fillColor: {
-	                pattern: {
-	                    path: {
-	                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
-	                        strokeWidth: 3
-	                    },
-	                    width: 10,
-	                    height: 10,
-	                    opacity: 0.4
-	                }
-	            }
-	        }
-	    },
-	    
-	    
-	    series: [{
-	        name: 'Gains et pertes par mois (cummulatif)',
-	       data: [[${valuesGainsandlossesSum}]]
-	    }]
-		});
-	});
-	  
-	  
 	 
 	  
  </script>
  
   <!-- 3. Add the container -->
   <div id="container1" class="graph1" style="width:100%; height:800px;"></div>
-  <div class="div-1" style="width:100%; height:20px;"></div>
-  
-  <div id="container2" class="graph1" style="width:100%; height:800px;"></div>
-  <div class="div-1" style="width:100%; height:20px;"></div>
+  <div class="div-1" style="width:100%; height:60px;"></div>
   
  
  <!-- footer block -->

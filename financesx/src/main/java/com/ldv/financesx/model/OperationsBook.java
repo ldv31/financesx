@@ -436,12 +436,24 @@ public class OperationsBook implements FileMgtInterface {
 						
 					}
 						
-					// case of reading of update files
+					// case of operation from update files for credit 
 					if (lString.length == 5){
-						// nothing to do for localMode and lassociation, we rely on default values for localMode and lassociation
+						// set default values for for localMode and lassociation
+						localMode = AssociationMode.NONE;
+						lassociation = CategoriesList.AUCUNE.toString();
 						
 						// update the credit value
 						lCredit = lString[4].isEmpty() ? 0 : Double.parseDouble(lString[4].replaceAll(",", "."));
+					}
+					
+					// case of operation from update files for debit
+					if (lString.length == 4){
+						// set default values for for localMode and lassociation
+						localMode = AssociationMode.NONE;
+						lassociation = CategoriesList.AUCUNE.toString();
+						
+						// update the credit value to 0 (this is a débit line)
+						lCredit = 0;
 					}
 					
 														

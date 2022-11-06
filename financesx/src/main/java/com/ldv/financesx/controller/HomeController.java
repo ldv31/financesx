@@ -852,15 +852,41 @@ public class HomeController {
 			
 			// ajouter le message de retour
 			modelAndView.addObject("resultMessage", resultMessage);
-			
-		
-		
-		
-		
+				
         // Main return statement 
         return modelAndView;
         
 	}
+	
+
+	
+	// affichage specifique pour alimentation et hygiène
+	@RequestMapping(value ={"/displayconstraintbudget.html"})
+	public ModelAndView displayconstraintbudget(Model model) {
+				
+		// create model and view
+		ModelAndView modelAndView = new ModelAndView("displayconstraintbudget.html");
+		
+		// lisr of value per operator form alimentation/hygiène
+		ArrayList<OperatorStats> foodSumPerOperator = opStatsService.getFoodSumPerOperator();
+					
+		//Intermediate datastore
+        Map<String, Double> foodSumPerOperatorMap = new LinkedHashMap<String, Double>();
+        
+        
+        for (OperatorStats stat : foodSumPerOperator) {
+        	foodSumPerOperatorMap.put(stat.getName(), -stat.getConsolidatedSum());
+    	}
+        modelAndView.addObject("keyFoodSumPerOperator", foodSumPerOperatorMap.keySet());
+        modelAndView.addObject("valuesFoodSumPerOperator", foodSumPerOperatorMap.values());
+		
+		
+        // Main return statement 
+        return modelAndView;
+	        
+	}
+	
+	
 	
 	
 	// direct injection of attributes for list of categories

@@ -151,7 +151,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	
 		
 	// get monthly data history (average) for a single category 
-		public StatsDataSeriesType2 getCategoryHistoryAverage (String  opCategorieUserChoice) {
+	public StatsDataSeriesType2 getCategoryHistoryAverage (String  opCategorieUserChoice) {
 				
 				// to fill the series
 				ArrayList<GlobalStatsDataType> categoryHistory = new ArrayList<GlobalStatsDataType>();
@@ -165,7 +165,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 				int indexC = 1;
 				
 				
-				// Idenfification de la catégorie selon le choix de l'utilisateur
+				// Identification de la catégorie selon le choix de l'utilisateur
 				for (StatType1 lOpStat : opStats.getlStat()) {
 					if (lOpStat.getOpCategory().equals(opCategorieUserChoice)) {
 									
@@ -242,19 +242,28 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	
 	
 	// Get budget data from database
+	/**
+     * Get budget data from database (sum of expenses without "Remboursements" and without "Epargne" )
+     * @input: None
+     * @return : list of budget expenses per month 
+     */
 	public ArrayList<GlobalStatsDataType> getBudget () {
 		
 		ArrayList<GlobalStatsDataType> budget = new ArrayList<GlobalStatsDataType>();
 		
-		// ....
+		// retrieve the list of expenses per month
 		StatType1 lOpStat = opStats.getlStatGlobal().get(1);
-							
+		
+		
+		
+		// reformat data for future display in HTML page
 		for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
 							
 			GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(sDataHistory.getMonthAndYearShort(), sDataHistory.getValue());
 							
 			budget.add(globalStatsDataType);								
 		}
+		
 	
 		return budget;	
 	}
@@ -270,7 +279,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		
 		double averageSumC = 0;
 		double averageValueC = 0;
-		int indexC = 1;
+		int indexC = 1;		
 		
 		for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
 			averageSumC += sDataHistory.getValue();
