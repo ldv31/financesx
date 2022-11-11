@@ -25,6 +25,8 @@ import com.ldv.financesx.model.Operation;
 import com.ldv.financesx.service.OpStatsService;
 import com.ldv.financesx.model.OperationCategory;
 import com.ldv.financesx.model.OperatorStats;
+import com.ldv.financesx.model.StatDataHistory;
+import com.ldv.financesx.model.StatType1;
 
 @Controller
 public class HomeController {
@@ -858,37 +860,40 @@ public class HomeController {
         
 	}
 	
-
-	
-	// affichage specifique pour alimentation et hygiène
-	@RequestMapping(value ={"/displayconstraintbudget.html"})
-	public ModelAndView displayconstraintbudget(Model model) {
-				
+		
+	/**
+	    * Display list budget constraints data.
+	    * @param None.
+	    * @return list of data per categories.
+	    */
+		@RequestMapping(value ={"/displayconstraintbudget.html"})
+		public ModelAndView displayconstraintbudget(Model model) {	
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displayconstraintbudget.html");
 		
-		// lisr of value per operator form alimentation/hygiène
-		ArrayList<OperatorStats> foodSumPerOperator = opStatsService.getFoodSumPerOperator();
-					
+		// categories data
+		ArrayList<StatType1> lStats = opStatsService.getCategoriesStatsConstraint();
+		
+		// get the list of months
+		ArrayList<StatDataHistory> categoryHistory = lStats.get(0).getDataHistory();
+		
 		//Intermediate datastore
-        Map<String, Double> foodSumPerOperatorMap = new LinkedHashMap<String, Double>();
-        
-        
-        for (OperatorStats stat : foodSumPerOperator) {
-        	foodSumPerOperatorMap.put(stat.getName(), -stat.getConsolidatedSum());
+        Map<String, Double> dataCategoryHistory = new LinkedHashMap<String, Double>();
+       
+        for (StatDataHistory stat : categoryHistory) {
+    		dataCategoryHistory.put(stat.getMonthAndYear().toString(), (double)0);
     	}
-        modelAndView.addObject("keyFoodSumPerOperator", foodSumPerOperatorMap.keySet());
-        modelAndView.addObject("valuesFoodSumPerOperator", foodSumPerOperatorMap.values());
+		
+		// add data to model
+	    modelAndView.addObject("lStats", lStats);
+	    modelAndView.addObject("valuesMonthsStats", dataCategoryHistory.keySet()); 
 		
 		
-        // Main return statement 
-        return modelAndView;
-	        
+	    // Main return statement 
+	    return modelAndView;    
+	    
 	}
-	
-	
-	
-	
+		
 	// direct injection of attributes for list of categories
 	@ModelAttribute("categorieslist")
 	public List<OperationCategory> getCategoriesList() {

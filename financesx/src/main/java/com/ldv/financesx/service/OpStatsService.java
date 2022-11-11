@@ -13,6 +13,7 @@ import com.ldv.financesx.model.GlobalStatsDataType;
 import com.ldv.financesx.model.Operation;
 import com.ldv.financesx.model.OperationCategory;
 import com.ldv.financesx.model.OperatorStats;
+import com.ldv.financesx.model.StatType1;
 import com.ldv.financesx.model.StatsDataSeriesType2;
 import com.ldv.financesx.repository.OpStatsRepository;
 
@@ -235,5 +236,14 @@ public class OpStatsService {
 		return opStatsRepository.getOpBookDataAmazon();		
 	}
 	
+	
+	/**
+    * Return a table that contains all the stats of categories.
+    * @param none.
+    * @return List of stats per categories.
+    */
+	public ArrayList<StatType1> getCategoriesStatsConstraint() {
+		return opStatsRepository.getCategoriesStatsConstraint();
+	}
 	
 }

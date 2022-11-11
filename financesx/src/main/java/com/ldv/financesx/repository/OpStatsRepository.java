@@ -553,26 +553,27 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	
 	
 	
-	
-	
-	
-	
-/*	
-	for (StatType1 lOpStat : opStat.getlStat()) {
-		if (lOpStat.getcType() == CategoryType.DEBIT) {
-			if (!lOpStat.getOpCategory().equals(CategoriesList.EPARGNE.getTxtType())) {
-				for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
-						dataset.addValue(Math.abs(sDataHistory.getValue()), lOpStat.getOpCategory(), sDataHistory.getMonthAndYearShort());
-						System.out.println(lOpStat.getOpCategory() + "  " + sDataHistory.getMonthAndYearShort());
+	/**
+	    * Return a table that contains all the stats of categories of type "debit" minus "Epargne".
+	    * @param none.
+	    * @return List of stats per categories of type "debit" minus "Epargne".
+	    */
+		public ArrayList<StatType1> getCategoriesStatsConstraint() {
+			
+			ArrayList<StatType1> returnStats = new ArrayList<StatType1>();
+			
+			for (StatType1 lOpStat : opStats.getlStat()) {
+				if (lOpStat.getcType() == CategoryType.DEBIT) {
+					if (lOpStat.isConstraint()) {
+						if (!lOpStat.getOpCategory().equals(CategoriesList.EPARGNE.getTxtType())) {
+							returnStats.add(lOpStat);
+						}
 					}
-			}	
-		}
-*/	
-	
-	
-	
-	
-	
+				}
+			}
+			
+			return returnStats;
+		}	
 	
 	
 	

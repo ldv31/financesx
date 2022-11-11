@@ -15,8 +15,14 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
     <script src="http://code.highcharts.com/highcharts.js"></script>
       
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/export-data.js"></script> 
+      
     <!-- 2. You can add print and export feature by adding this line -->
     <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
     
 	<script th:inline="javascript" type="text/javascript">
 	 
@@ -26,33 +32,57 @@
 	jQuery(document).ready(function() {
 		  
 		// this is populated by Thymeleaf:
-	    var pieChartData = /*[[${expensescatpie}]]*/ [];
+	    var stackedColumnChartData = /*[[${lStats}]]*/ [];
 
+		// each element of the series correspond to a category
 	    var series = [];
-	    var data = [];
 	    
 	    
-	    for (var i = 0; i < pieChartData.length; i++) {
-	        var object = {};
-	        object.name = pieChartData[i].index;
-	        object.y = pieChartData[i].opValue;
-	        data.push(object);
-	    }
-	    
-	    var seriesObject = {
-	        name: 'Répartition des dépenses (hors épargne)',
-	        colorByPoint: true,
-	        data: data
-	    };
-	
-	
-	
-	<!-- B. Construction du graph -->
-	 jQuery(document).ready(function() { 
+		// loop on each category (i)
+	    for (var i = 0; i < stackedColumnChartData.length; i++) {
+	    //for (var i = 0; i < 5; i++) {
+	    	
+	    	// There is one data table for each category
+			// each element of the data table correspond to a value of a category for a spécific month
+		    var data = [];
+	    	
+	    	// Add the values (j) for each month for this category
+	    	for (var j = 0; j < stackedColumnChartData[i].dataHistory.length; j++) {
+		    	
+		        var object = {};
+		        object.y = -stackedColumnChartData[i].dataHistory[j].value;
+		        data.push(object);
+	       
+		        // get the name of the category
+		        var catName = stackedColumnChartData[i].opCategory;
+		        
+	    	}
+		        
+	    	// add the name of the category and the corrsponding data per month
+	        var seriesObject = {
+	    	        name: catName,
+	    	        data: data
+	        };
+	        
+	        series.push(seriesObject);
+	    }	    	 
+	 	drawPieChart(series);
+		
+		
+	 // draw the pie chart:
+	 function drawPieChart(series1) {	
 	 Highcharts.chart('container1', {
 	    chart: {
 	        type: 'column',
-	        backgroundColor:'white'
+	        backgroundColor:'white',
+        	
+	        options3d: {
+	            enabled: true,
+	            alpha: 5,
+	            beta: 0,
+	            depth: 50,
+	            viewDistance: 50
+	        }
 	    },
 	    title: {
 	        text: 'Budget contraint',
@@ -63,7 +93,7 @@
 	    },
 	    
 	    xAxis: {
-	        categories: [[${keyFoodSumPerOperator}]],
+	        categories: [[${valuesMonthsStats}]],
 		    labels: {
 	            style: {
 	                color: 'black',
@@ -113,25 +143,20 @@
 		    }
 		  },
 	    
-	    series: [{
-	        name: 'Magasins',
-	       data: [[${valuesFoodSumPerOperator}]]
-	    }, {
-	        name: 'Toto',
-		   data: [[${valuesFoodSumPerOperator}]]
-		}]
-	});
-	});
-	  
-	  	  
+		series: series1   
+		
+	  }); // end of container
 	 
+	  } // end of draw chart
+	  
+	}); // end of main function
 	 
 	 
 	  
  </script>
  
   <!-- 3. Add the container -->
-  <div id="container1" class="graph1" style="width:100%; height:800px;"></div>
+  <div id="container1" class="graph1" style="width:100%; height:1100px;"></div>
   <div class="div-1" style="width:100%; height:60px;"></div>
   
  
