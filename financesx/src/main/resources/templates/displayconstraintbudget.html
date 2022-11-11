@@ -20,7 +20,34 @@
     
 	<script th:inline="javascript" type="text/javascript">
 	 
-	<!-- A. Sommes des dépenses par categories -->
+	
+	<!-- A. Build the tables for categories with monthly sum value-->
+	
+	jQuery(document).ready(function() {
+		  
+		// this is populated by Thymeleaf:
+	    var pieChartData = /*[[${expensescatpie}]]*/ [];
+
+	    var series = [];
+	    var data = [];
+	    
+	    
+	    for (var i = 0; i < pieChartData.length; i++) {
+	        var object = {};
+	        object.name = pieChartData[i].index;
+	        object.y = pieChartData[i].opValue;
+	        data.push(object);
+	    }
+	    
+	    var seriesObject = {
+	        name: 'Répartition des dépenses (hors épargne)',
+	        colorByPoint: true,
+	        data: data
+	    };
+	
+	
+	
+	<!-- B. Construction du graph -->
 	 jQuery(document).ready(function() { 
 	 Highcharts.chart('container1', {
 	    chart: {

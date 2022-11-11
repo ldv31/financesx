@@ -21,6 +21,9 @@ import com.ldv.financesx.model.OperationCategory;
 import com.ldv.financesx.model.OperatorStats;
 import com.ldv.financesx.model.StatType1;
 import com.ldv.financesx.model.StatsDataSeriesType2;
+
+import com.ldv.financesx.model.StatDataType;
+
 import com.ldv.financesx.model.CategoriesList;
 
 import com.ldv.financesx.model.StatDataHistory;
@@ -546,6 +549,30 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		}		
 		return monthExpenses;
 	}
+	
+	
+	
+	
+	
+	
+	
+	
+/*	
+	for (StatType1 lOpStat : opStat.getlStat()) {
+		if (lOpStat.getcType() == CategoryType.DEBIT) {
+			if (!lOpStat.getOpCategory().equals(CategoriesList.EPARGNE.getTxtType())) {
+				for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
+						dataset.addValue(Math.abs(sDataHistory.getValue()), lOpStat.getOpCategory(), sDataHistory.getMonthAndYearShort());
+						System.out.println(lOpStat.getOpCategory() + "  " + sDataHistory.getMonthAndYearShort());
+					}
+			}	
+		}
+*/	
+	
+	
+	
+	
+	
 	
 	
 	
