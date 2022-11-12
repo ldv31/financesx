@@ -6,6 +6,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
+
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -63,7 +65,7 @@ public class HomeController {
         
         for (GlobalStatsDataType stat : globalStatsDataList) {
         	// convert to positive value for display
-    		data.put(stat.getIndex(), -stat.getOpValue());
+    		data.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
     	}
         
         modelAndView.addObject("keySet", data.keySet());
@@ -78,7 +80,7 @@ public class HomeController {
         Map<String, Double> dataSumIncome = new LinkedHashMap<String, Double>();
         
         for (GlobalStatsDataType stat : globalStatsDataListSumCredit) {
-        	dataSumIncome.put(stat.getIndex(), stat.getOpValue());
+        	dataSumIncome.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         
         modelAndView.addObject("keySetSumCredit", dataSumIncome.keySet());
@@ -96,7 +98,7 @@ public class HomeController {
          
          
         for (GlobalStatsDataType stat : globalStatsDataListMoyDebit) {
-     		dataMoyDebit.put(stat.getIndex(), -stat.getOpValue());
+     		dataMoyDebit.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
      	}
 	    modelAndView.addObject("keySetMoyDebit", dataMoyDebit.keySet());
 	    modelAndView.addObject("valuesMoyDebit", dataMoyDebit.values());
@@ -111,7 +113,7 @@ public class HomeController {
 	      
 	      
 	    for (GlobalStatsDataType stat : globalStatsDataListMoyCredit) {
-	  		dataMoyCredit.put(stat.getIndex(), stat.getOpValue());
+	  		dataMoyCredit.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
       	}
         modelAndView.addObject("keySetMoyCredit", dataMoyCredit.keySet());
         modelAndView.addObject("valuesMoyCredit", dataMoyCredit.values());
@@ -156,12 +158,12 @@ public class HomeController {
         Map<String, Double> dataCategoryHistoryAverage = new LinkedHashMap<String, Double>();
         
         for (GlobalStatsDataType stat : categoryHistory) {
-    		dataCategoryHistory.put(stat.getIndex(), stat.getOpValue());
+    		dataCategoryHistory.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         
         
         for (GlobalStatsDataType stat : categoryHistoryAverage) {
-    		dataCategoryHistoryAverage.put(stat.getIndex(), stat.getOpValue());
+    		dataCategoryHistoryAverage.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         
         modelAndView.addObject("keySetCategoryHistory", dataCategoryHistory.keySet());
@@ -206,11 +208,11 @@ public class HomeController {
         
         
         for (GlobalStatsDataType stat : categoryHistory) {
-    		dataCategoryHistory.put(stat.getIndex(), stat.getOpValue());
+    		dataCategoryHistory.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         
         for (GlobalStatsDataType stat : categoryHistoryAverage) {
-    		dataCategoryHistoryAverage.put(stat.getIndex(), stat.getOpValue());
+    		dataCategoryHistoryAverage.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         
         modelAndView.addObject("keySetCategoryHistory", dataCategoryHistory.keySet());
@@ -249,13 +251,13 @@ public class HomeController {
         Map<String, Double> dataGainsandlossesSum = new LinkedHashMap<String, Double>();
         
         for (GlobalStatsDataType stat : gainsandlosses) {
-        	dataGainsandlosses.put(stat.getIndex(), stat.getOpValue());
+        	dataGainsandlosses.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         modelAndView.addObject("keySetGainsandlosses", dataGainsandlosses.keySet());
         modelAndView.addObject("valuesGainsandlosses", dataGainsandlosses.values());
 	
         for (GlobalStatsDataType stat : gainsandlossesSum) {
-        	dataGainsandlossesSum.put(stat.getIndex(), stat.getOpValue());
+        	dataGainsandlossesSum.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         modelAndView.addObject("keySetGainsandlossesSum", dataGainsandlossesSum.keySet());
         modelAndView.addObject("valuesGainsandlossesSum", dataGainsandlossesSum.values());
@@ -272,8 +274,7 @@ public class HomeController {
 	
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("budget.html");
-		
-		
+			
 		// Add the budget stats
 		ArrayList<GlobalStatsDataType> budget = opStatsService.getBudget();
         modelAndView.addObject("budget", budget);
@@ -283,7 +284,7 @@ public class HomeController {
         
         
         for (GlobalStatsDataType stat : budget) {
-        	dataBudget.put(stat.getIndex(), -stat.getOpValue());
+        	dataBudget.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
     	}
         modelAndView.addObject("keyBudget", dataBudget.keySet());
         modelAndView.addObject("valuesBudget", dataBudget.values());
@@ -297,7 +298,7 @@ public class HomeController {
          
          
          for (GlobalStatsDataType stat : budgetAverage) {
-         	dataAverageBudget.put(stat.getIndex(), -stat.getOpValue());
+         	dataAverageBudget.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
      	}
          modelAndView.addObject("keyBudgetAverage", dataAverageBudget.keySet());
          modelAndView.addObject("valuesBudgetAverage", dataAverageBudget.values());
@@ -324,7 +325,7 @@ public class HomeController {
         
         
         for (GlobalStatsDataType stat : reimbursement) {
-        	dataReimbursement.put(stat.getIndex(), stat.getOpValue());
+        	dataReimbursement.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
     	}
         modelAndView.addObject("keyReimbursement", dataReimbursement.keySet());
         modelAndView.addObject("valuesReimbursement", dataReimbursement.values());
@@ -338,7 +339,7 @@ public class HomeController {
          
          
          for (GlobalStatsDataType stat : averageBudgetWithReimbursements) {
-         	dataAverageBudgetWithReimbursements.put(stat.getIndex(), -stat.getOpValue());
+         	dataAverageBudgetWithReimbursements.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
      	}
          modelAndView.addObject("keyAverageBudgetWithReimbursements", dataAverageBudgetWithReimbursements.keySet());
          modelAndView.addObject("valuesAverageBudgetWithReimbursements", dataAverageBudgetWithReimbursements.values());
@@ -611,7 +612,7 @@ public class HomeController {
         
         
         for (OperatorStats stat : foodSumPerOperator) {
-        	foodSumPerOperatorMap.put(stat.getName(), -stat.getConsolidatedSum());
+        	foodSumPerOperatorMap.put(stat.getName(), -Precision.round(stat.getConsolidatedSum(),1));
     	}
         modelAndView.addObject("keyFoodSumPerOperator", foodSumPerOperatorMap.keySet());
         modelAndView.addObject("valuesFoodSumPerOperator", foodSumPerOperatorMap.values());
@@ -871,6 +872,7 @@ public class HomeController {
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displayconstraintbudget.html");
 		
+		// This section if for the fisrt graph with expesnes per months and per category
 		// categories data
 		ArrayList<StatType1> lStats = opStatsService.getCategoriesStatsConstraint();
 		
@@ -888,11 +890,44 @@ public class HomeController {
 	    modelAndView.addObject("lStats", lStats);
 	    modelAndView.addObject("valuesMonthsStats", dataCategoryHistory.keySet()); 
 		
-		
+		// this section is for the 2nd graph, consolidate expenses constraint budget
+	    // Add the constraint budget stats
+		ArrayList<GlobalStatsDataType> budget = opStatsService.getBudgetConstraint();
+        modelAndView.addObject("budget", budget);
+        
+        //Intermediate datastore
+        Map<String, Double> dataBudgetConstraint = new LinkedHashMap<String, Double>();
+        
+        
+        for (GlobalStatsDataType stat : budget) {
+        	dataBudgetConstraint.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+    	}
+        modelAndView.addObject("keyBudgetConstraint", dataBudgetConstraint.keySet());
+        modelAndView.addObject("valuesBudgetConstraint", dataBudgetConstraint.values());
+	
+        // Add the average budget stats
+ 		ArrayList<GlobalStatsDataType> budgetAverageConstraint = opStatsService.getAverageBudgetConstraint();
+        modelAndView.addObject("budgetAverage", budgetAverageConstraint);
+         
+        //Intermediate datastore
+        Map<String, Double> dataAverageBudgetConstraint = new LinkedHashMap<String, Double>();
+         
+         
+         for (GlobalStatsDataType stat : budgetAverageConstraint) {
+        	 dataAverageBudgetConstraint.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+     	}
+         modelAndView.addObject("keyBudgetAverageConstraint", dataAverageBudgetConstraint.keySet());
+         modelAndView.addObject("valuesBudgetAverageConstraint", dataAverageBudgetConstraint.values());
+	    
+	    
+	    
 	    // Main return statement 
 	    return modelAndView;    
 	    
 	}
+		
+	
+		
 		
 	// direct injection of attributes for list of categories
 	@ModelAttribute("categorieslist")

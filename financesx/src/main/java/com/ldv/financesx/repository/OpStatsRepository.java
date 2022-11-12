@@ -7,6 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.logging.Level;
 
+import org.apache.commons.math3.util.Precision;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -271,6 +272,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		return budget;	
 	}
 	
+
 	
 	// Get budget average without reimbursementsdata from database
 	public ArrayList<GlobalStatsDataType> getAverageBudget () {
@@ -279,6 +281,34 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		
 		// ....
 		StatType1 lOpStat = opStats.getlStatGlobal().get(1);
+		
+		double averageSumC = 0;
+		double averageValueC = 0;
+		int indexC = 1;		
+		
+		for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
+			averageSumC += sDataHistory.getValue();
+			averageValueC = averageSumC / indexC;
+			
+			GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(sDataHistory.getMonthAndYearShort(), averageValueC);
+			
+			indexC++;
+			
+			budget.add(globalStatsDataType);								
+		}
+		
+		return budget;	
+	}
+	
+	
+	
+	// Get constraint expenses budget average data (without reimbursements)  from database
+	public ArrayList<GlobalStatsDataType> getAverageBudgetConstraint () {
+		
+		ArrayList<GlobalStatsDataType> budget = new ArrayList<GlobalStatsDataType>();
+		
+		// ....
+		StatType1 lOpStat = opStats.getlStatGlobal().get(4);
 		
 		double averageSumC = 0;
 		double averageValueC = 0;
@@ -537,7 +567,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 						if ((currentDate.getMonth() == sDataHistory.getMonthAndYear().getMonth()) &&
 								currentDate.getYear() == sDataHistory.getMonthAndYear().getYear()) {
 							//Ajouter la valeur du dernier mois						
-							monthExpenses.put(lOpStat.getOpCategory(), -sDataHistory.getValue());
+							monthExpenses.put(lOpStat.getOpCategory(), -Precision.round(sDataHistory.getValue(),1));
 
 						}		
 					}		
@@ -576,6 +606,36 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		}	
 	
 	
+		
+		/**
+	     * Get budget data from database (sum of mandatory expenses without "Remboursements" and without "Epargne" )
+	     * @input: None
+	     * @return : list of budget expenses per month 
+	     */
+		public ArrayList<GlobalStatsDataType> getBudgetConstraint () {
+			
+			ArrayList<GlobalStatsDataType> budget = new ArrayList<GlobalStatsDataType>();
+			
+			// retrieve the list of expenses per month
+			StatType1 lOpStat = opStats.getlStatGlobal().get(4);
+
+			// reformat data for future display in HTML page
+			for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
+								
+				GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(sDataHistory.getMonthAndYearShort(), sDataHistory.getValue());
+								
+				budget.add(globalStatsDataType);								
+			}
+
+			return budget;	
+		}
+			
+			
+			
+			
+		
+		
+		
 	
 	/**
     * Return the list of Amazon operation (still not associated to the right category).

@@ -111,6 +111,14 @@ public class OpStatsService {
 	}
 	
 	
+	public ArrayList<GlobalStatsDataType> getAverageBudgetConstraint () {
+    	
+    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getAverageBudgetConstraint();
+    	   	  	        
+    	return globalStatsDataList;	
+	}
+	
+	
 	public ArrayList<GlobalStatsDataType> getReimbursement () {
 	    	
 	    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getReimbursement();
@@ -246,4 +254,14 @@ public class OpStatsService {
 		return opStatsRepository.getCategoriesStatsConstraint();
 	}
 	
+	
+	
+	/**
+     * Get budget data from database (sum of mandatory expenses without "Remboursements" and without "Epargne" )
+     * @input: None
+     * @return : list of budget expenses per month 
+     */
+	public ArrayList<GlobalStatsDataType> getBudgetConstraint () {
+		return opStatsRepository.getAverageBudget();
+	}
 }

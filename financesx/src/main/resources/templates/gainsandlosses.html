@@ -31,14 +31,7 @@
 	 Highcharts.chart('container1', {
 		chart: {
 	    	zoomType: 'xy',
-	        backgroundColor:'white',
-	        options3d: {
-	            enabled: true,
-	            alpha: 5,
-	            beta: 0,
-	            depth: 50,
-	            viewDistance: 50
-	        }
+	        backgroundColor:'white'	       
 		},
 	    title: {
 	        text: 'Gains et pertes par mois (épargne non prise en compte)',
@@ -105,6 +98,9 @@
 	    },
 	    
 	    
+	    tooltip: {
+	        shared: true
+	      },
 	    
 	    series: [{
 		       name: 'Gains et pertes par mois', 

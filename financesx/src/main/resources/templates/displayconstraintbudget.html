@@ -50,7 +50,7 @@
 	    	for (var j = 0; j < stackedColumnChartData[i].dataHistory.length; j++) {
 		    	
 		        var object = {};
-		        object.y = -stackedColumnChartData[i].dataHistory[j].value;
+		        object.y = -stackedColumnChartData[i].dataHistory[j].value.toFixed(1);
 		        data.push(object);
 	       
 		        // get the name of the category
@@ -68,6 +68,112 @@
 	    }	    	 
 	 	drawPieChart(series);
 		
+	 	
+	 	Highcharts.chart('container2', {
+		 	chart: {
+		    	zoomType: 'xy',
+		        backgroundColor:'white',
+		        /*
+		        options3d: {
+		            enabled: true,
+		            alpha: 5,
+		            beta: 0,
+		            depth: 50,
+		            viewDistance: 50
+		        }
+	 			*/
+		    },
+		    title: {
+		        text: 'Depenses contraintes mensuelles (sans les remboursements et sans epargne)',
+		        style: {
+		            color: 'black',
+		            font: 'bold 25px "Trebuchet MS", Verdana, sans-serif',
+		         }
+		    },
+		    
+		    xAxis: {
+		        categories: [[${keyBudgetConstraint}]],
+			    labels: {
+		            style: {
+		                color: 'black',
+		                fontSize:'15px'
+		            }
+	        	}
+		    },
+		    
+		      
+	      yAxis: [{ // Primary yAxis
+	    	    labels: {
+	    	      format: '{value} €',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[1]
+	    	      }
+	    	    },
+	    	    title: {
+	    	      text: 'Moyenne mensuelle',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[1]
+	    	      }
+	    	    }
+	    	  }, { // Secondary yAxis
+	    	    title: {
+	    	      text: 'Dépenses mensuelle',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[0]
+	    	      }
+	    	    },
+	    	    labels: {
+	    	      format: '{value} €',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[0]
+	    	      }
+	    	    },
+	    	    opposite: true
+		    }],    
+		            
+		      
+		    plotOptions: {
+		    	area: {
+		            fillColor: {
+		                pattern: {
+		                    path: {
+		                        d: 'M 0 0 L 10 10 M 9 -1 L 11 1 M -1 9 L 1 11',
+		                        strokeWidth: 3
+		                    },
+		                    width: 10,
+		                    height: 10,
+		                    opacity: 0.4
+		                }
+		            }
+		        }
+		    },
+		    
+		 
+		    tooltip: {
+		        shared: true
+		      },
+		    
+		 	series: [{
+		 	   name: 'Budget contraint mensuel',
+			   data: [[${valuesBudgetConstraint}]],
+			   type: 'column',
+			   yAxis: 1,
+			   tooltip: {
+				      valueSuffix: ' €'
+			   }
+		    },
+		    {
+		       name: 'Budget contraint moyens mensuel (sans les remboursements)',
+			   data: [[${valuesBudgetAverageConstraint}]],
+		       type: 'spline',
+		       tooltip: {
+				      valueSuffix: ' €'
+			   }
+		    }]
+		 
+		  }); // end of 2nd container	  
+	 	
+ 	
 		
 	 // draw the pie chart:
 	 function drawPieChart(series1) {	
@@ -146,7 +252,7 @@
 		series: series1   
 		
 	  }); // end of container
-	 
+	   
 	  } // end of draw chart
 	  
 	}); // end of main function
@@ -158,6 +264,7 @@
   <!-- 3. Add the container -->
   <div id="container1" class="graph1" style="width:100%; height:1100px;"></div>
   <div class="div-1" style="width:100%; height:60px;"></div>
+  <div id="container2" class="graph1" style="width:100%; height:1100px;"></div>
   
  
  <!-- footer block -->

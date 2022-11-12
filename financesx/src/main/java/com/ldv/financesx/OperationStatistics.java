@@ -73,7 +73,8 @@ public class OperationStatistics implements OpStatInterface {
 		lStatGlobal.add(new StatType1("GlobalGainLossHistory", 0, CategoryType.TOUS, false));
 		lStatGlobal.add(new StatType1("GlobalDebitHistory", 0, CategoryType.DEBIT, false));
 		lStatGlobal.add(new StatType1("GlobalCreditHistory", 0, CategoryType.CREDIT, false));
-		lStatGlobal.add(new StatType1("GlobalReimbursement", 0, CategoryType.CREDIT, false));		
+		lStatGlobal.add(new StatType1("GlobalReimbursement", 0, CategoryType.CREDIT, false));
+		lStatGlobal.add(new StatType1("GlobalConstraints", 0, CategoryType.CREDIT, false));
 		
 		// Objective : for each category add to its history the operation that belongs to it
 		// Parameters: "CategoriesList" contains the list of Categories that have been previously built from the association file (csv)
@@ -176,10 +177,16 @@ public class OperationStatistics implements OpStatInterface {
 			Collections.reverse(lStatOp1.getDataHistory());
 		}
 		
-		// instantiate data history array for global stats (first for all operation, second for debit operation only, third for Reimbursement)	
+		// instantiate data history array for global stats:
+		// - 1st (0) - GlobalGainLossHistory - for sum of all operations (expesnes and income) without epargne (gain and loss)
+		// - 2nd (1) - GlobalDebitHistory - for all expenses operations  without "Epargne"
+		// - 3rd (2) - GlobalCreditHistory
+		// - 4th (3) - GlobalReimbursement - for Reimbursement
+		// - 5th (4) - GlobalConstraints - for all constraint expenses operations  without "Epargne" constraint 
 		CreateDataHistoryWithDates(lStatGlobal.get(0).getDataHistory());
 		CreateDataHistoryWithDates(lStatGlobal.get(1).getDataHistory());
 		CreateDataHistoryWithDates(lStatGlobal.get(3).getDataHistory());
+		CreateDataHistoryWithDates(lStatGlobal.get(4).getDataHistory());
 		
 		// fill global stats
 		// lStat is an array. Each element in the array contain a category will all its stats (including the history data)
@@ -206,7 +213,8 @@ public class OperationStatistics implements OpStatInterface {
 				}
 				
 				
-				// Loop on the history array of the global stat, débit only + reimbursement (to get the effective amount spent) where the sum will be made (oe item is a date = year/moth where the sum will be made)
+				// Loop on the history array of the global stat, débit only + reimbursement (to get the effective amount spent) 
+				// where the sum will be made (oe item is a date = year/month where the sum will be made)
 				for (StatDataHistory tmpStatDataHistory : lStatGlobal.get(1).getDataHistory()) {
 					// if the global history date is the same as the one in the history of the category then add the value to the sum
 					if (tmpStatDataHistory.CompareYearAndMonth(lDataHistory) == true)
@@ -219,7 +227,7 @@ public class OperationStatistics implements OpStatInterface {
 							}
 						}
 						
-						// add credit only if reimbursement
+						// add credit only if reimbursement (ToDo : to be verified, why do we add reimbursement here)
 						if (loopStat.getcType() == CategoryType.CREDIT) {
 							if (loopStat.getOpCategory().equals("CPAM + Mutuelle") || loopStat.getOpCategory().equals("Remboursement") || loopStat.getOpCategory().equals("Amazon Credit") ) {
 								tmpStatDataHistory.setValue(tmpStatDataHistory.getValue() + lDataHistory.getValue());
@@ -231,6 +239,30 @@ public class OperationStatistics implements OpStatInterface {
 						+ tmpStatDataHistory.getValue() + "  => " + loopStat.getOpCategory());
 					}
 				}
+				
+				
+				// - 5th (4) for constraint expenses
+				// Loop on the history array of the global stat, constraint expenses only (to get the effective amount spent) 
+				// where the sum will be made (oe item is a date = year/month where the sum will be made)
+				for (StatDataHistory tmpStatDataHistory : lStatGlobal.get(4).getDataHistory()) {
+					// if the global history date is the same as the one in the history of the category then add the value to the sum
+					if (tmpStatDataHistory.CompareYearAndMonth(lDataHistory) == true)
+					{
+						// add only if débit (without "epargne")
+						if (loopStat.getcType() == CategoryType.DEBIT) {
+							// do not add in case of "épargne" as it is not an expense nor a revenue
+							if (!loopStat.getOpCategory().equals("Epargne")) {
+								// add only if constraint expense
+								if (loopStat.isConstraint()) {
+									tmpStatDataHistory.setValue(tmpStatDataHistory.getValue() + lDataHistory.getValue());
+								}
+							}
+						}
+						
+					LogManager.LOGGER.log(Level.FINE,"Global stat, Category : " + lStatGlobal.get(1).getOpCategory().toString() + " " + lDataHistory.getMonthAndYear().toString() + " Valeure cumulée : " 
+						+ tmpStatDataHistory.getValue() + "  => " + loopStat.getOpCategory());
+					}
+				}			
 			}
 			
 			if ((loopStat.getOpCategory().equals("Remboursement")) || (loopStat.getOpCategory().equals("CPAM + Mutuelle")) || (loopStat.getOpCategory().equals("Amazon Crédit")) ) {

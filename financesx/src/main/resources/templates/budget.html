@@ -34,13 +34,6 @@
 	 	chart: {
 	    	zoomType: 'xy',
 	        backgroundColor:'white',
-	        options3d: {
-	            enabled: true,
-	            alpha: 5,
-	            beta: 0,
-	            depth: 50,
-	            viewDistance: 50
-	        }
 	    },
 	    title: {
 	        text: 'Budgets mensuels (sans les remboursements et sans epargne)',
@@ -107,9 +100,10 @@
 	        }
 	    },
 	    
-	    
-	 
-	 
+	    tooltip: {
+	        shared: true
+	      },
+	  
 	 	series: [{
 	 	   name: 'Budgets mensuels',
 		   data: [[${valuesBudget}]],
