@@ -55,6 +55,9 @@
 	    
 	      
       yAxis: [{ // Primary yAxis
+    	    min:0,
+    	    //tickInterval: 1000,
+    	    max: 10000,
     	    labels: {
     	      format: '{value} €',
     	      style: {
@@ -68,7 +71,10 @@
     	      }
     	    }
     	  }, { // Secondary yAxis
-    	    title: {
+    		 min:0,
+    		 //tickInterval: 1000,
+    		 max: 10000,
+    		 title: {
     	      text: 'Dépenses mensuelle',
     	      style: {
     	        color: Highcharts.getOptions().colors[0]
@@ -123,7 +129,7 @@
  </script>
  
   <!-- 3. Add the container -->
-  <div id="container1" class="graph1" style="width:100%; height:800px;"></div>
+  <div id="container1" class="graph1" style="width:100%; height:1100px;"></div>
 
   
  

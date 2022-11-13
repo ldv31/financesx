@@ -648,6 +648,21 @@ public class HomeController {
         modelAndView.addObject("sum", (int)sum);
         modelAndView.addObject("selecteddate", LocalDate.now());
 		
+        
+        ArrayList<GlobalStatsDataType> globalStatsDataListMoyDebit = opStatsService.getGlobalStatsMoyDebit();
+        modelAndView.addObject("globalStatsDataListMoyDebit", globalStatsDataListMoyDebit);
+         
+        //Intermediate datastore
+        Map<String, Double> dataMoyDebit = new LinkedHashMap<String, Double>();
+         
+         
+        for (GlobalStatsDataType stat : globalStatsDataListMoyDebit) {
+     		dataMoyDebit.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+     	}
+	    modelAndView.addObject("keySetMoyDebit", dataMoyDebit.keySet());
+	    modelAndView.addObject("valuesMoyDebit", dataMoyDebit.values());
+        
+        
         // Main return statement 
         return modelAndView;			
 	}
@@ -690,6 +705,20 @@ public class HomeController {
 		        
 		        modelAndView.addObject("sum", (int)sum);
 		        modelAndView.addObject("selecteddate", selectedDateString);
+		        
+		        	        
+		        ArrayList<GlobalStatsDataType> globalStatsDataListMoyDebit = opStatsService.getGlobalStatsMoyDebit();
+		        modelAndView.addObject("globalStatsDataListMoyDebit", globalStatsDataListMoyDebit);
+		         
+		        //Intermediate datastore
+		        Map<String, Double> dataMoyDebit = new LinkedHashMap<String, Double>();
+		         
+		         
+		        for (GlobalStatsDataType stat : globalStatsDataListMoyDebit) {
+		     		dataMoyDebit.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+		     	}
+			    modelAndView.addObject("keySetMoyDebit", dataMoyDebit.keySet());
+			    modelAndView.addObject("valuesMoyDebit", dataMoyDebit.values());        
 				
 			}
 			else {
@@ -872,7 +901,7 @@ public class HomeController {
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displayconstraintbudget.html");
 		
-		// This section if for the fisrt graph with expesnes per months and per category
+		// This section if for the first graph with expesnes per months and per category
 		// categories data
 		ArrayList<StatType1> lStats = opStatsService.getCategoriesStatsConstraint();
 		
@@ -890,22 +919,22 @@ public class HomeController {
 	    modelAndView.addObject("lStats", lStats);
 	    modelAndView.addObject("valuesMonthsStats", dataCategoryHistory.keySet()); 
 		
-		// this section is for the 2nd graph, consolidate expenses constraint budget
-	    // Add the constraint budget stats
-		ArrayList<GlobalStatsDataType> budget = opStatsService.getBudgetConstraint();
-        modelAndView.addObject("budget", budget);
+		// 2.this section is for the 2nd graph, consolidate expenses constraint budget
+	    // 2.1 Add the constraint budget stats
+		ArrayList<GlobalStatsDataType> budgetConstraint = opStatsService.getBudgetConstraint();
+        modelAndView.addObject("budgetConstraint", budgetConstraint);
         
         //Intermediate datastore
         Map<String, Double> dataBudgetConstraint = new LinkedHashMap<String, Double>();
         
         
-        for (GlobalStatsDataType stat : budget) {
+        for (GlobalStatsDataType stat : budgetConstraint) {
         	dataBudgetConstraint.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
     	}
         modelAndView.addObject("keyBudgetConstraint", dataBudgetConstraint.keySet());
         modelAndView.addObject("valuesBudgetConstraint", dataBudgetConstraint.values());
 	
-        // Add the average budget stats
+        // 2.2 Add the average budget stats
  		ArrayList<GlobalStatsDataType> budgetAverageConstraint = opStatsService.getAverageBudgetConstraint();
         modelAndView.addObject("budgetAverage", budgetAverageConstraint);
          

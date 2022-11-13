@@ -43,11 +43,19 @@
 
 
 <!-- 1. Add JQuery and Highcharts in the head of your page -->
-  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
-  <script src="http://code.highcharts.com/highcharts.js"></script>
+   <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+     
+    <script src="https://code.highcharts.com/highcharts-3d.js"></script>
     
- <!-- 2. You can add print and export feature by adding this line -->
- <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    <script src="https://code.highcharts.com/modules/export-data.js"></script> 
+      
+    <!-- 2. You can add print and export feature by adding this line -->
+    <script src="http://code.highcharts.com/modules/exporting.js"></script>
+    
+    <script src="https://code.highcharts.com/modules/accessibility.js"></script>
+    
+	<script th:inline="javascript" type="text/javascript"></script>
 
 	<!-- limitation on the datapicker to current date-->
 	<script type="text/javascript">
@@ -59,11 +67,11 @@
 	<script th:inline="javascript" type="text/javascript">
 	
 	<!-- A. Sommes des dépenses par categories -->
-	  jQuery(document).ready(function() {
+	 jQuery(document).ready(function() {
 	  
 	 Highcharts.chart('container1', {
 	    chart: {
-	        type: 'column',
+	    	zoomType: 'xy',
 	        backgroundColor:'white'
 	    },
 	    title: {
@@ -84,19 +92,45 @@
         	}
 	    },
 	    
-	    
-	    yAxis: {
-	        title: {
-	          text: '€'
-	        },
-	        labels: {
-	            style: {
-	                color: 'black',
-	                fontSize:'15px'
-	            }
-        	}
-	      },
-	    
+            
+	      yAxis: [{ // Primary yAxis
+	    	    min:0,
+	    	    //tickInterval: 1000,
+	    	    // ToDo : replace by the max value possible for this graph in between both series
+	    	    // to be provide in the HomeController corresponding function
+	    	    max: 1000,
+	    	    labels: {
+	    	      format: '{value} €',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[1]
+	    	      }
+	    	    },
+	    	    title: {
+	    	      text: 'Moyenne mensuelle',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[1]
+	    	      }
+	    	    }
+	    	  }, { // Secondary yAxis
+	    		min:0,
+	      	    //tickInterval: 1000,
+	      	    max: 1000,
+	    		title: {
+	    	      text: 'Dépenses mensuelle',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[0]
+	    	      }
+	    	    },
+	    	    labels: {
+	    	      format: '{value} €',
+	    	      style: {
+	    	        color: Highcharts.getOptions().colors[0]
+	    	      }
+	    	    },
+	    	    opposite: true
+		   }],     
+	      
+	      
 	    plotOptions: {
 	    	area: {
 	            fillColor: {
@@ -118,11 +152,18 @@
 	      },
 	    
 	    series: [{
-	        name: 'catégories',
-	       data: [[${valuesMonthsStats}]]
-	    }]
-		});
-	});
+	       name: 'Valeur par catégories',
+	       data: [[${valuesMonthsStats}]],
+	       type: 'column',
+		   yAxis: 1
+	    },
+	    {
+	       name: 'Moyenne par catégorie',
+		   data: [[${valuesMoyDebit}]],
+	       type: 'spline',
+	    }] // end of series
+	  }); // end of Highchart
+	}); // end of function
 	    
  </script>
 

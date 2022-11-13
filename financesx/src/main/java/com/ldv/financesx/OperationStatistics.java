@@ -70,6 +70,8 @@ public class OperationStatistics implements OpStatInterface {
 		LogManager.LOGGER.log(Level.FINE,"***********************************");
 		
 		// generate data type for pre-generated global statistics
+		// here the usual category provided to StatType1 is replace by a type of global stat, ex: "GlobalGainLossHistory" instead of "Santé"
+		// the same class is used for different purpose
 		lStatGlobal.add(new StatType1("GlobalGainLossHistory", 0, CategoryType.TOUS, false));
 		lStatGlobal.add(new StatType1("GlobalDebitHistory", 0, CategoryType.DEBIT, false));
 		lStatGlobal.add(new StatType1("GlobalCreditHistory", 0, CategoryType.CREDIT, false));
@@ -255,12 +257,13 @@ public class OperationStatistics implements OpStatInterface {
 								// add only if constraint expense
 								if (loopStat.isConstraint()) {
 									tmpStatDataHistory.setValue(tmpStatDataHistory.getValue() + lDataHistory.getValue());
+																	
+								LogManager.LOGGER.log(Level.FINE,"Global stat, Category : " + lStatGlobal.get(4).getOpCategory().toString() + " " + lDataHistory.getMonthAndYear().toString() + " Valeure cumulée : " 
+									+ tmpStatDataHistory.getValue() + "  => " + loopStat.getOpCategory());
+									
 								}
 							}
-						}
-						
-					LogManager.LOGGER.log(Level.FINE,"Global stat, Category : " + lStatGlobal.get(1).getOpCategory().toString() + " " + lDataHistory.getMonthAndYear().toString() + " Valeure cumulée : " 
-						+ tmpStatDataHistory.getValue() + "  => " + loopStat.getOpCategory());
+						}					
 					}
 				}			
 			}
@@ -280,8 +283,8 @@ public class OperationStatistics implements OpStatInterface {
 					}
 				}
 			}
-		}
-	}
+		} // end of loop on categories
+	} // end of function
 
 
 	private void CreateDataHistoryWithDates (ArrayList<StatDataHistory> dataHistory) {

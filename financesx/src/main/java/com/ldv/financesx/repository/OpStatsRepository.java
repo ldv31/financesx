@@ -258,8 +258,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 		// retrieve the list of expenses per month
 		StatType1 lOpStat = opStats.getlStatGlobal().get(1);
 		
-		
-		
+			
 		// reformat data for future display in HTML page
 		for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
 							

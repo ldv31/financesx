@@ -262,6 +262,6 @@ public class OpStatsService {
      * @return : list of budget expenses per month 
      */
 	public ArrayList<GlobalStatsDataType> getBudgetConstraint () {
-		return opStatsRepository.getAverageBudget();
+		return opStatsRepository.getBudgetConstraint();
 	}
 }
