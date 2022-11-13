@@ -96,9 +96,9 @@
 	      yAxis: [{ // Primary yAxis
 	    	    min:0,
 	    	    //tickInterval: 1000,
-	    	    // ToDo : replace by the max value possible for this graph in between both series
+	    	    // ToDo : replace "max" by the max value possible for this graph in between both series
 	    	    // to be provide in the HomeController corresponding function
-	    	    max: 1000,
+	    	    max: [[${maxValueForChart}]],
 	    	    labels: {
 	    	      format: '{value} €',
 	    	      style: {
@@ -114,7 +114,7 @@
 	    	  }, { // Secondary yAxis
 	    		min:0,
 	      	    //tickInterval: 1000,
-	      	    max: 1000,
+	      	    max: [[${maxValueForChart}]],
 	    		title: {
 	    	      text: 'Dépenses mensuelle',
 	    	      style: {

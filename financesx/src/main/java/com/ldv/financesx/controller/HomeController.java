@@ -56,7 +56,9 @@ public class HomeController {
 		
 		
 		// A. add the global stats for sum of expenses per categories
-		ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsService.getGlobalStatsSumDebit();
+		// parameter in function getGlobalStatsSumDebit is set to flase to get in formation on all categories
+		// parameter to true is for constraint categories only
+		ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsService.getGlobalStatsSumDebit(false);
         modelAndView.addObject("globalStatsDataList", globalStatsDataList);
         
         //Intermediate datastore
@@ -357,7 +359,7 @@ public class HomeController {
 		ModelAndView modelAndView = new ModelAndView("expensescatpie.html");
 		
 		// Add the stats
-		ArrayList<GlobalStatsDataType> expensescatpie = opStatsService.getExpensesPerCategoryforPieChart();
+		ArrayList<GlobalStatsDataType> expensescatpie = opStatsService.getExpensesPerCategoryforPieChart(false);
 		ArrayList<GlobalStatsDataType> expensesvsincomecatpie = opStatsService.getExpensesPerCategoryVsIncomeForPieChart();
         
         modelAndView.addObject("expensescatpie", expensescatpie);
@@ -632,9 +634,13 @@ public class HomeController {
 		
 		double sum = 0;
 		
+		// identify the max value for the display in between sums and average across all categories
+		double maxValueForChart = 0;
+		
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displaymonthstats.html");
-					
+		
+		// 1. Add to the model the sum for each category on the month selected
 		//Intermediate datastore
         Map<String, Double> monthsStats = opStatsService.getMonthStats(LocalDate.now());
         
@@ -643,12 +649,14 @@ public class HomeController {
 		
         for (Double sumCat: monthsStats.values()) {
         	sum+=sumCat;
+        	maxValueForChart = (sumCat > maxValueForChart) ? sumCat : maxValueForChart;
         }
         
         modelAndView.addObject("sum", (int)sum);
         modelAndView.addObject("selecteddate", LocalDate.now());
 		
         
+        // 2. Add to the model the data about the average value
         ArrayList<GlobalStatsDataType> globalStatsDataListMoyDebit = opStatsService.getGlobalStatsMoyDebit();
         modelAndView.addObject("globalStatsDataListMoyDebit", globalStatsDataListMoyDebit);
          
@@ -658,11 +666,15 @@ public class HomeController {
          
         for (GlobalStatsDataType stat : globalStatsDataListMoyDebit) {
      		dataMoyDebit.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+     		maxValueForChart = (-stat.getOpValue() > maxValueForChart) ? -stat.getOpValue() : maxValueForChart;
      	}
 	    modelAndView.addObject("keySetMoyDebit", dataMoyDebit.keySet());
 	    modelAndView.addObject("valuesMoyDebit", dataMoyDebit.values());
         
         
+	    // add to model the max value for the chart
+	    modelAndView.addObject("maxValueForChart", maxValueForChart);
+	    
         // Main return statement 
         return modelAndView;			
 	}
@@ -677,6 +689,9 @@ public class HomeController {
 		public ModelAndView displaymonthstatsupdate(@RequestParam("startDate") String selectedDateString, Model model) {
 			
 			double sum = 0;
+			
+			// identify the max value for the display in between sums and average across all categories
+			double maxValueForChart = 0;
 			
 			LocalDate selectedDate;
 			
@@ -693,6 +708,7 @@ public class HomeController {
 				// convert selected date string to localdate
 				selectedDate = LocalDate.parse(selectedDateString);
 				
+				// 1. Add to the model the sum for each category on the month selected
 				//Intermediate datastore
 		        Map<String, Double> monthsStats = opStatsService.getMonthStats(selectedDate);
 		        
@@ -701,12 +717,13 @@ public class HomeController {
 				
 		        for (Double sumCat: monthsStats.values()) {
 		        	sum+=sumCat;
+		        	maxValueForChart = (sumCat > maxValueForChart) ? sumCat : maxValueForChart;
 		        }
 		        
 		        modelAndView.addObject("sum", (int)sum);
 		        modelAndView.addObject("selecteddate", selectedDateString);
 		        
-		        	        
+		        // 2. Add to the model the data about the average value	        
 		        ArrayList<GlobalStatsDataType> globalStatsDataListMoyDebit = opStatsService.getGlobalStatsMoyDebit();
 		        modelAndView.addObject("globalStatsDataListMoyDebit", globalStatsDataListMoyDebit);
 		         
@@ -716,6 +733,7 @@ public class HomeController {
 		         
 		        for (GlobalStatsDataType stat : globalStatsDataListMoyDebit) {
 		     		dataMoyDebit.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+		     		maxValueForChart = (-stat.getOpValue() > maxValueForChart) ? -stat.getOpValue() : maxValueForChart;
 		     	}
 			    modelAndView.addObject("keySetMoyDebit", dataMoyDebit.keySet());
 			    modelAndView.addObject("valuesMoyDebit", dataMoyDebit.values());        
@@ -726,6 +744,9 @@ public class HomeController {
 		        modelAndView.addObject("selecteddate", "pas de date selectionnée");
 			}
 	
+			// add to model the max value for the chart
+		    modelAndView.addObject("maxValueForChart", maxValueForChart);
+			
 	        // Main return statement 
 	        return modelAndView;			
 		}
@@ -892,14 +913,19 @@ public class HomeController {
 	
 		
 	/**
-	    * Display list budget constraints data.
-	    * @param None.
-	    * @return list of data per categories.
-	    */
-		@RequestMapping(value ={"/displayconstraintbudget.html"})
-		public ModelAndView displayconstraintbudget(Model model) {	
+    * Display list budget constraints data.
+    * @param None.
+    * @return list of data per categories.
+    */
+	@RequestMapping(value ={"/displayconstraintbudget.html"})
+	public ModelAndView displayconstraintbudget(Model model) {	
+		
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("displayconstraintbudget.html");
+		
+		// identify the max value for the display in between sums and average across all categories
+		double maxValueForChart = 0; 
+		
 		
 		// This section if for the first graph with expesnes per months and per category
 		// categories data
@@ -930,6 +956,7 @@ public class HomeController {
         
         for (GlobalStatsDataType stat : budgetConstraint) {
         	dataBudgetConstraint.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+        	maxValueForChart = (-stat.getOpValue() > maxValueForChart) ? -stat.getOpValue() : maxValueForChart;
     	}
         modelAndView.addObject("keyBudgetConstraint", dataBudgetConstraint.keySet());
         modelAndView.addObject("valuesBudgetConstraint", dataBudgetConstraint.values());
@@ -944,12 +971,21 @@ public class HomeController {
          
          for (GlobalStatsDataType stat : budgetAverageConstraint) {
         	 dataAverageBudgetConstraint.put(stat.getIndex(), -Precision.round(stat.getOpValue(),1));
+        	 maxValueForChart = (-stat.getOpValue() > maxValueForChart) ? -stat.getOpValue() : maxValueForChart;
      	}
          modelAndView.addObject("keyBudgetAverageConstraint", dataAverageBudgetConstraint.keySet());
          modelAndView.addObject("valuesBudgetAverageConstraint", dataAverageBudgetConstraint.values());
 	    
 	    
-	    
+        // 3. This secton is for the thirs grap (pie) 	
+ 		// Add the stats
+ 		ArrayList<GlobalStatsDataType> expensescatpie = opStatsService.getExpensesPerCategoryforPieChart(true);
+         
+        modelAndView.addObject("expensescatpie", expensescatpie);
+       
+        // add to model the max value for the chart
+	    modelAndView.addObject("maxValueForChart", maxValueForChart);
+        
 	    // Main return statement 
 	    return modelAndView;    
 	    

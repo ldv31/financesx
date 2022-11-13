@@ -66,9 +66,100 @@
 	        
 	        series.push(seriesObject);
 	    }	    	 
-	 	drawPieChart(series);
+	 	drawColumnChart(series);
 		
+	 	 	 	
+	 	// 2 Pie chart of the constraint categories (sum)
+	    // this is populated by Thymeleaf:
+	    var pieChartData = /*[[${expensescatpie}]]*/ [];
+
+	    var series = [];
+	    var data = [];
+	    
+	    
+	    for (var i = 0; i < pieChartData.length; i++) {
+	        var object = {};
+	        object.name = pieChartData[i].index;
+	        object.y = pieChartData[i].opValue;
+	        data.push(object);
+	    }
+	    
+	    var seriesObject = {
+	        name: 'Répartition des dépenses (hors épargne)',
+	        colorByPoint: true,
+	        data: data
+	    };
+	    series.push(seriesObject);
+	    drawPieChart(series);
 	 	
+	 	
+	    // draw the pie chart:
+	    function drawPieChart(series1) {	
+			
+		 Highcharts.chart('container3', {
+		    chart: {
+		    	plotBackgroundColor: null,
+		        plotBorderWidth: null,
+		        plotShadow: false,
+		        backgroundColor:'white',
+		        type: 'pie',
+	        	options3d: {
+	       	      enabled: true,
+	       	      alpha: 45,
+	       	      beta: 0
+	       	    }
+		    },
+		    title: {
+		    	useHTML: true,
+		        text: 'Répartition des dépenses contraintes',
+		        style: {
+		            color: 'black',
+		            font: 'bold 35px "Trebuchet MS", Verdana, sans-serif',
+		            'background-color': 'white'
+		         }
+		    },
+		    
+		    tooltip: {
+		        pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+		      },
+		      accessibility: {
+		        point: {
+		          valueSuffix: '%'
+		        }
+		      },
+		    
+		    plotOptions: {
+		    	pie: {
+		    	      allowPointSelect: true,
+		    	      cursor: 'pointer',
+		    	      dataLabels: {
+		    	        enabled: true,
+		    	        format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+	    	        	style: {
+	                        color: 'black',
+	                        fontSize:'20px'
+	                    }
+		    	      },
+		      
+			          innerSize: 100,
+			          depth: 100
+		      
+		        }
+		    },
+		    
+		    
+		    series: series1    
+		   
+		  }); // end of container
+		 
+		  } // end of draw pie chart
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	
+	 	// Graph with some of contraints expenses per month and average
 	 	Highcharts.chart('container2', {
 		 	chart: {
 		    	zoomType: 'xy',
@@ -94,6 +185,8 @@
 		    
 		      
 	      yAxis: [{ // Primary yAxis
+	    	    min:0,
+	    	    max: [[${maxValueForChart}]],
 	    	    labels: {
 	    	      format: '{value} €',
 	    	      style: {
@@ -107,7 +200,9 @@
 	    	      }
 	    	    }
 	    	  }, { // Secondary yAxis
-	    	    title: {
+	    	    min:0,
+	    	    max: [[${maxValueForChart}]],
+	    		title: {
 	    	      text: 'Dépenses mensuelle',
 	    	      style: {
 	    	        color: Highcharts.getOptions().colors[0]
@@ -166,8 +261,8 @@
 	 	
  	
 		
-	 // draw the pie chart:
-	 function drawPieChart(series1) {	
+	 // draw the column chart with detail for all categories and per month:
+	 function drawColumnChart(series1) {	
 	 Highcharts.chart('container1', {
 	    chart: {
 	        type: 'column',
@@ -256,6 +351,8 @@
   <div id="container1" class="graph1" style="width:100%; height:1100px;"></div>
   <div class="div-1" style="width:100%; height:40px;"></div>
   <div id="container2" class="graph1" style="width:100%; height:1100px;"></div>
+  <div class="div-1" style="width:100%; height:40px;"></div>
+  <div id="container3" class="graph1" style="width:100%; height:1100px;"></div>
   
  
  <!-- footer block -->

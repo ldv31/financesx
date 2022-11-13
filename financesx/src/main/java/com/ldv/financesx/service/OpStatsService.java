@@ -28,9 +28,9 @@ public class OpStatsService {
 		return rString;
 	}
 	
-	public ArrayList<GlobalStatsDataType> getGlobalStatsSumDebit () {
+	public ArrayList<GlobalStatsDataType> getGlobalStatsSumDebit (boolean isConstraintFilter) {
 	    	
-    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getGlobalStatsSumDebit();
+    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getGlobalStatsSumDebit(isConstraintFilter);
     	   	  	        
     	return globalStatsDataList;	
 	} 
@@ -135,9 +135,9 @@ public class OpStatsService {
 	}
 	
 	
-	public ArrayList<GlobalStatsDataType> getExpensesPerCategoryforPieChart () {
+	public ArrayList<GlobalStatsDataType> getExpensesPerCategoryforPieChart (boolean isConstraintFilter) {
     	
-    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getExpensesPerCategoryforPieChart();
+    	ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsRepository.getExpensesPerCategoryforPieChart(isConstraintFilter);
     	   	  	        
     	return globalStatsDataList;	
 	}

@@ -86,7 +86,12 @@
 	    
 	    
 	    yAxis: [{ // Primary yAxis
-    	    labels: {
+	    	min:0,
+    	    //tickInterval: 1000,
+    	    // ToDo : replace "max" by the max value possible for this graph in between both series
+    	    // to be provide in the HomeController corresponding function
+    	    max: [[${maxValueForChart}]],
+	    	labels: {
     	      format: '{value} €',
     	      style: {
     	        color: Highcharts.getOptions().colors[1]
@@ -99,7 +104,12 @@
     	      }
     	    }
     	  }, { // Secondary yAxis
-    	    title: {
+   		    min:0,
+    	    //tickInterval: 1000,
+    	    // ToDo : replace "max" by the max value possible for this graph in between both series
+    	    // to be provide in the HomeController corresponding function
+    	    max: [[${maxValueForChart}]],
+    		title: {
     	      text: 'Dépenses mensuelle',
     	      style: {
     	        color: Highcharts.getOptions().colors[0]

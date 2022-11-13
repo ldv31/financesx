@@ -50,19 +50,35 @@ public class OpStatsRepository {
     
 	}
     
-    /* functions to extract date from database*/
+    /* functions to extract data from database*/
+   
     
-    public ArrayList<GlobalStatsDataType> getGlobalStatsSumDebit () {
+    
+    /**
+     * Return the list sum for each category.
+     * @param isConstraint (booelan), if true return only the list for the constraint category
+     * @return list of Amazon operation.
+     */	   
+    public ArrayList<GlobalStatsDataType> getGlobalStatsSumDebit (boolean isConstraintFilter) {
     	
     	ArrayList<GlobalStatsDataType> globalStatsDataList = new ArrayList<GlobalStatsDataType>();
     	
     	for (StatType1 lOpStat : opStats.getlStat()) {
     		if (lOpStat.getcType() == CategoryType.DEBIT) {
     			
-    				GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(lOpStat.getOpCategory(), lOpStat.getOpValue());
-    					
-    				globalStatsDataList.add(globalStatsDataType);
-   				
+    				// check if the function was call on all categories or on constaint categories only
+    				// 1. Return all categories
+    				if (!isConstraintFilter) {
+	    				GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(lOpStat.getOpCategory(), lOpStat.getOpValue());	    					
+	    				globalStatsDataList.add(globalStatsDataType);
+    				}
+    				// 2. return on constraint categories
+    				else if (lOpStat.isConstraint()) {
+    					GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(lOpStat.getOpCategory(), lOpStat.getOpValue());	    					
+	    				globalStatsDataList.add(globalStatsDataType);
+    				}
+    				// Do not return any information (isConstraintFilter == true and lOpStat.isConstraint() == false)
+    				else {}		
     			}
     		}
     	  	        
@@ -390,25 +406,54 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	}
 	
 	
-	// Get expenses per category for pie chart from database
-	public ArrayList<GlobalStatsDataType> getExpensesPerCategoryforPieChart () {
+	/**
+     * Get expenses per category for pie chart display
+     * @Param isConstraintFilter is set to true return only the constraint categories
+     * @return list of expenses per category vs income chart
+     */	
+	public ArrayList<GlobalStatsDataType> getExpensesPerCategoryforPieChart (boolean isConstraintFilter) {
 		
 		ArrayList<GlobalStatsDataType> expensesPerCategoryforPieChart = new ArrayList<GlobalStatsDataType>();
 		
 		for (StatType1 lOpStat : opStats.getlStat()) {
 			if (lOpStat.getcType() == CategoryType.DEBIT) {
 				if (!lOpStat.getOpCategory().equals(CategoriesList.EPARGNE.getTxtType())) {
-					//String label = lOpStat.getOpCategory() + String.format( ": %.0f€,  %.2f %%", Math.abs(lOpStat.getOpValue()), 100*(Math.abs(lOpStat.getOpValue())/Math.abs(opStats.getTotalDebitSum())));
-					String label = lOpStat.getOpCategory() + String.format( " - %.0f€ ", Math.abs(lOpStat.getOpValue()));
-					GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(label, Math.abs(lOpStat.getOpValue()));
-					
-					expensesPerCategoryforPieChart.add(globalStatsDataType);	
-					
+									
+					// check if the function was call on all categories or on constaint categories only
+    				// 1. Return all categories
+    				if (!isConstraintFilter) {
+    					String label = lOpStat.getOpCategory() + String.format( " - %.0f€ ", Math.abs(lOpStat.getOpValue()));
+    					GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(label, Math.abs(lOpStat.getOpValue()));
+    					
+    					expensesPerCategoryforPieChart.add(globalStatsDataType);	
+    				}
+    				// 2. return on constraint categories
+    				else if (lOpStat.isConstraint()) {
+    					String label = lOpStat.getOpCategory() + String.format( " - %.0f€ ", Math.abs(lOpStat.getOpValue()));
+    					GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(label, Math.abs(lOpStat.getOpValue()));
+    					
+    					expensesPerCategoryforPieChart.add(globalStatsDataType);	
+    				}
+    				// Do not return any information (isConstraintFilter == true and lOpStat.isConstraint() == false)
+    				else {}						
 				}
 			}
 		}
 		return expensesPerCategoryforPieChart;	
 	}
+	
+
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
