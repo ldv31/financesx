@@ -43,6 +43,9 @@ public class Operation {
 	// Eléments de l'opération
 	public Operation (String dateOp, String dateVal, String libelle, double debit, double credit, String pAssociation, AssociationMode lmode) {
 		
+		// ToDo, throw exception if values are not correct (in order to avoir creation of the object) for:
+		// credit and debit = 0
+		
 		// set the Id of the operation
 		this.opId = opIdCounter++;
 		

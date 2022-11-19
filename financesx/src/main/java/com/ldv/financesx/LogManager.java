@@ -87,6 +87,7 @@ public class LogManager {
             //Setting levels to handlers and LOGGER
             consoleHandler.setLevel(Level.ALL);
             fileHandler.setLevel(Level.ALL);
+            // Default :"INFO", Debug:"FINE"
             LOGGER.setLevel(Level.INFO);
             
             // supprimer le log par defaut sur la console pour éviter un double log

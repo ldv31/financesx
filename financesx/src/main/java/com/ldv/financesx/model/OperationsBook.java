@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 
 import javax.annotation.PostConstruct;
-import javax.swing.JFileChooser;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,9 +21,6 @@ import com.ldv.financesx.CsvFileHelper;
 import com.ldv.financesx.FileMgtInterface;
 import com.ldv.financesx.LogManager;
 import com.ldv.financesx.OperationsResults;
-
-import com.ldv.financesx.model.CategoriesList;
-import com.ldv.financesx.model.Operation;
 
 import com.ldv.financesx.DialogMessage;
 import com.ldv.financesx.ErrorCodeAndMessage;
@@ -48,18 +44,18 @@ public class OperationsBook implements FileMgtInterface {
 	private String backupPath;
 
 	// store the list of operation extracted from CVS file
-	ArrayList<String[]> aString;
+	ArrayList<String[]> aString = new ArrayList<String[]>();
 	// store the list of association extracted from CVS file
-	ArrayList<String[]> bString;
+	ArrayList<String[]> bString = new ArrayList<String[]>();
 	// store the list of categories extracted from CVS file
-	ArrayList<String[]> categoriesString;
-	ArrayList<Operation> opBookData;
+	ArrayList<String[]> categoriesString = new ArrayList<String[]>();
+	ArrayList<Operation> opBookData = new ArrayList<Operation>();
 	
 	// store the list of operation with errors (missing element in the operation)
 	ArrayList<String[]> operationsWithError = new ArrayList<String[]>();
 	
 	// list of operations without association
-	ArrayList<Operation> opBookDataWithoutAssociation;
+	ArrayList<Operation> opBookDataWithoutAssociation = new ArrayList<Operation>();
 	ArrayList<OperationCategory> categoriesList = new ArrayList<OperationCategory>();
 	int countWithoutAssociation = 0;
 	double sumValueCredit = 0;
@@ -68,9 +64,6 @@ public class OperationsBook implements FileMgtInterface {
 	// used to backup and update fiance.csv file
 	File source;
 	File dest;
-
-	// Dialog box to load new finance data
-	private JFileChooser fileChooser;
 
 	// operation Book stats data
 	OperationBookStats operationBookStats = new OperationBookStats();
@@ -83,9 +76,6 @@ public class OperationsBook implements FileMgtInterface {
 
 		LogManager.LOGGER.log(Level.INFO, "Chargement des opérations dans le livre de compte: START => " + start);
 		LogManager.LOGGER.log(Level.FINE, "Lecture du fichier des opérations");
-
-		// create save/load file objects
-		fileChooser = new JFileChooser();
 
 		// livre de compte (base de donnée interne des opérations)
 		opBookData = new ArrayList<Operation>();
@@ -332,7 +322,12 @@ public class OperationsBook implements FileMgtInterface {
 			e.printStackTrace();
 		}
 	}
-
+ 
+	/**
+	 * Retrieve the list of categories from the csv file
+	 * @input: None 
+	 * @return: ArrayList<OperationCategory> 
+	 */
 	public void opWithoutAssociation() {
 		
 		// reset operation without association list
@@ -341,6 +336,7 @@ public class OperationsBook implements FileMgtInterface {
 		LogManager.LOGGER.log(Level.FINE, "********************************************************");
 		LogManager.LOGGER.log(Level.FINE, "******** Liste des opérations sans associations ********");
 		LogManager.LOGGER.log(Level.FINE, "********************************************************");
+	
 		for (Operation op : opBookData) {
 			if (op.getaMode() == AssociationMode.NONE) {
 				countWithoutAssociation++;
@@ -355,13 +351,14 @@ public class OperationsBook implements FileMgtInterface {
 		LogManager.LOGGER.log(Level.FINE, "Total débit sans association : " + (int) sumValueDebit);
 	}
 
+	
 	public ArrayList<Operation> getOpBookDataWithoutAssociation() {
 		return opBookDataWithoutAssociation;
 	}
 	
 	
 	/**
-    * Return the list of Amazon operations (still not associated to the right catégory).
+    * Return the list of Amazon operations (still not associated to the right category).
     * @param None.
     * @return list of Amazon operations.
     */	
@@ -381,7 +378,7 @@ public class OperationsBook implements FileMgtInterface {
 	// inputString est le tableau des opérations extraites du fichier "finance.csv"
 	// et inputBookData est le livre de compte dans lequel les opération seront
 	// formalisées
-	private void fillOperationBookData(ArrayList<String[]> inputString, ArrayList<Operation> inputBookData,
+	public void fillOperationBookData(ArrayList<String[]> inputString, ArrayList<Operation> inputBookData,
 			OperationBookStats operationBookStats) throws ParseException {
 		boolean csvHeader = true;
 		double lCredit = 0;
@@ -556,7 +553,7 @@ public class OperationsBook implements FileMgtInterface {
 		}
 	}
 
-	private void generateCategoriesList() {
+	void generateCategoriesList() {
 		boolean csvHeader = true;
 		boolean categoryIsNew = true;
 		CategoryType opType;
@@ -670,6 +667,15 @@ public class OperationsBook implements FileMgtInterface {
 
 	public void setOperationsWithError(ArrayList<String[]> operationsWithError) {
 		this.operationsWithError = operationsWithError;
+	}
+
+
+	public ArrayList<String[]> getCategoriesString() {
+		return categoriesString;
+	}
+
+	public void setCategoriesString(ArrayList<String[]> categoriesString) {
+		this.categoriesString = categoriesString;
 	}
 
 	@Override
