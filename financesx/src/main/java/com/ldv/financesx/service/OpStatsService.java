@@ -254,8 +254,7 @@ public class OpStatsService {
 		return opStatsRepository.getCategoriesStatsConstraint();
 	}
 	
-	
-	
+		
 	/**
      * Get budget data from database (sum of mandatory expenses without "Remboursements" and without "Epargne" )
      * @input: None
@@ -264,4 +263,17 @@ public class OpStatsService {
 	public ArrayList<GlobalStatsDataType> getBudgetConstraint () {
 		return opStatsRepository.getBudgetConstraint();
 	}
+	
+	/**
+    * Return the list of operation with errors during reading of CSV file.
+    * @param None.
+    * @return list of Amazon operation.
+    */		
+	public ArrayList<String[]> getOperationsWithErrors() {			
+			return opStatsRepository.getOperationsWithErrors();		
+	}
+	
+	
+	
+	
 }

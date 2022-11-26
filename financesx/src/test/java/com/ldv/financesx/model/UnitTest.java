@@ -59,8 +59,7 @@ public class UnitTest {
 		String[] c = {"25/10/2021","25/10/2021","CARTE 11/11 CASTORAMA PORTET S1446/","-55.85","0.0","Bricolage et Jardin","Automatic"};
 		String[] d = {"12/02/2021","12/02/2021","CARTE 10/02 AMAZON EU SARL PAYLI2090401/","-6.5","0.0","Amazon","Automatic"};	
 		String[] e = {"02/11/2020","02/11/2020","CHQ 7424516","-10.0","0.0","Aucune","Pas d'association"};
-		
-		
+				
 		aString.add(a);
 		aString.add(b);
 		aString.add(c);
@@ -178,8 +177,7 @@ public class UnitTest {
 		
 		// Then
 		assertEquals(opBook.getOperationBookStats().getEndOperationDate().toString(), EndOperationDate);
-		assertEquals(opBook.getOperationBookStats().getStartOperationDate().toString(), StartOperationDate);
-		
+		assertEquals(opBook.getOperationBookStats().getStartOperationDate().toString(), StartOperationDate);		
 	}
 	
 	
@@ -250,7 +248,7 @@ public class UnitTest {
 	
 	
 	
-	@DisplayName("Get the list of categories from categories.csv file and compar to invalid data")
+	@DisplayName("Get the list of categories from categories.csv file and compare to invalid data")
 	@Test
 	void UnitTest_OperationBook_Class_CategoriesString_List_ReturnNotEqual() throws Exception {
 		

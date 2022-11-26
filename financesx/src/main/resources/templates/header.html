@@ -19,6 +19,9 @@
 			<a class="navbar-brand" hre="">Little Witch</a>			
 				<ul class="navbar-nav ms-auto">
 					<li class="nav-item">
+						<a id="errormsgheader" class="nav-link" style="color:red; " href="inputdataanalysis.html">Erreur ! </a> 
+					</li>
+					<li class="nav-item">
 						<a class="nav-link" href="Accueil.html">Accueil</a>
 					</li>
 					<li class="nav-item">
@@ -35,6 +38,20 @@
 					</li>
 				</ul>
 		</nav>
-	</header>
+		
+		<script type="text/javascript" th:inline="javascript">
+			var elem = document.getElementById('errormsgheader');
+			// this is populated by Thymeleaf:
+			var errorStatus = [[${errorStatus}]];
+			console.log("msg: " + errorStatus);
+			if (errorStatus == false) {
+				elem.style.display = 'none';
+			} else
+				elem.style.display = 'initial';
+		</script>
+		
+		
+	</header>	
+	
 </body>
 </html>

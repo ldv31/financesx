@@ -141,20 +141,31 @@ public class OperationsBook implements FileMgtInterface {
 		// generation de la liste des catégories
 		generateCategoriesList();
 
-		// Sauvegarde du fichier des operations après l'ajout des associations
-		saveFinance();
-
-		// backup du fichier d'entrée finance.csv et du fichier des associations
-		backupFiles();
-
-		// affichage du livre de compte.
-		LogManager.LOGGER.log(Level.FINE, toString());
-
-		// livre de compte chargé
-		// compute execution time:
-		Instant end = Instant.now();
-		Duration res = Duration.between(start, end);
-		LogManager.LOGGER.log(Level.INFO, "Chargement des opérations dans le livre de compte: COMPLETED => " + res);
+		// in case of error identified during the reading of the CSV file do not modify the CSV files
+		if (operationsWithError.size() == 0) {
+			// Sauvegarde du fichier des operations après l'ajout des associations
+			saveFinance();
+	
+			// backup du fichier d'entrée finance.csv et du fichier des associations
+			backupFiles();
+	
+			// affichage du livre de compte.
+			LogManager.LOGGER.log(Level.FINE, toString());
+	
+			// livre de compte chargé
+			// compute execution time:
+			Instant end = Instant.now();
+			Duration res = Duration.between(start, end);
+			LogManager.LOGGER.log(Level.INFO, "Chargement des opérations dans le livre de compte: COMPLETED => " + res);
+		} else {
+			
+			// affichage du livre de compte.
+			LogManager.LOGGER.log(Level.FINE, toString());
+			
+			Instant end = Instant.now();
+			Duration res = Duration.between(start, end);
+			LogManager.LOGGER.log(Level.SEVERE, "Erreur Chargement des opérations dans le livre de compte: COMPLETED => " + res);
+		}
 	}
 
 	// Sauvegarde le fichier des associations
@@ -678,6 +689,7 @@ public class OperationsBook implements FileMgtInterface {
 		this.categoriesString = categoriesString;
 	}
 
+	
 	@Override
 	public void loadNewFinanceData() {
 		// TODO Auto-generated method stub

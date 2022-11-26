@@ -674,21 +674,27 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 			return budget;	
 		}
 			
-			
-			
-			
-		
-		
-		
+				
 	
 	/**
-    * Return the list of Amazon operation (still not associated to the right category).
+    * Return the list of Amazon operations (still not associated to the right category).
     * @param None.
     * @return list of Amazon operation.
     */		
 	public ArrayList<Operation> getOpBookDataAmazon() {			
 			return opStats.getOpBook().getOpBookDataAmazon();		
 	}
+	
+	
+	/**
+    * Return the list of operation with errors during reading of CSV file.
+    * @param None.
+    * @return list of Amazon operation.
+    */		
+	public ArrayList<String[]> getOperationsWithErrors() {			
+			return opStats.getOpBook().getOperationsWithError();		
+	}
+	
 	
 }
 

@@ -213,3 +213,8 @@ input {
 .highlight{
   background-color: #ddd;
 }
+
+
+.errormsg {
+  color : red;
+}

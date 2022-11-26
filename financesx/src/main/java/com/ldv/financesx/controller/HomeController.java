@@ -130,6 +130,9 @@ public class HomeController {
 	@RequestMapping(value ={"/displayStatsHistory.html"}, method = RequestMethod.GET)
 	public ModelAndView displayStatsHistory(Model model) {
 	
+		// identify the max value for the display in between sums and average across all categories
+		double maxValueForChartHistory = 0;
+		
 		// for debug 
 		LogManager.LOGGER.log(Level.FINE,"execution of /displayStatsHistory.html ");
 
@@ -161,6 +164,7 @@ public class HomeController {
         
         for (GlobalStatsDataType stat : categoryHistory) {
     		dataCategoryHistory.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
+        	maxValueForChartHistory = (Precision.round(stat.getOpValue(),1) > maxValueForChartHistory) ? Precision.round(stat.getOpValue(),1) : maxValueForChartHistory;
     	}
         
         
@@ -178,6 +182,9 @@ public class HomeController {
         modelAndView.addObject("CategoryName", opStatsService.getCategoryHistory(opCategorieUserChoice).getOpCategory() + ": valeures");
         modelAndView.addObject("CategoryNameAverage", opStatsService.getCategoryHistory(opCategorieUserChoice).getOpCategory() + ": Moyenne" );
         
+        // add to model the max value for the chart
+	    modelAndView.addObject("maxValueForChartHistory", maxValueForChartHistory);
+        
         // Main return statement 
         return modelAndView;
         
@@ -186,7 +193,10 @@ public class HomeController {
 	// page to display after selecting a category in the drop-down
 	@RequestMapping(value ={"/historystatsselect.html"}, method = RequestMethod.POST)
 	public ModelAndView displayStatsHistorySelect(@ModelAttribute("opCategoryObject") OperationCategory opCategoryObject, Model model) {
-			
+		
+		// identify the max value for the display in between sums and average across all categories
+		double maxValueForChartHistory = 0;
+		
 		LogManager.LOGGER.log(Level.FINE,"Category object after select: " + opCategoryObject);
 		
 		OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObject");
@@ -211,6 +221,7 @@ public class HomeController {
         
         for (GlobalStatsDataType stat : categoryHistory) {
     		dataCategoryHistory.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
+        	maxValueForChartHistory = (Precision.round(stat.getOpValue(),1) > maxValueForChartHistory) ? Precision.round(stat.getOpValue(),1) : maxValueForChartHistory;
     	}
         
         for (GlobalStatsDataType stat : categoryHistoryAverage) {
@@ -227,6 +238,9 @@ public class HomeController {
         modelAndView.addObject("CategoryName", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory() + ": valeures");
         modelAndView.addObject("CategoryNameAverage", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory() + ": moyenne");
 	
+        // add to model the max value for the chart
+	    modelAndView.addObject("maxValueForChartHistory", maxValueForChartHistory);
+        
         // Main return statement 
         return modelAndView;
         
@@ -647,6 +661,7 @@ public class HomeController {
         modelAndView.addObject("keyMonthsStats", monthsStats.keySet());
         modelAndView.addObject("valuesMonthsStats", monthsStats.values());
 		
+        // identify the max value to be passed to the graph Y-axis for display
         for (Double sumCat: monthsStats.values()) {
         	sum+=sumCat;
         	maxValueForChart = (sumCat > maxValueForChart) ? sumCat : maxValueForChart;
@@ -991,9 +1006,7 @@ public class HomeController {
 	    
 	}
 		
-	
-		
-		
+			
 	// direct injection of attributes for list of categories
 	@ModelAttribute("categorieslist")
 	public List<OperationCategory> getCategoriesList() {
@@ -1001,5 +1014,29 @@ public class HomeController {
 		list.addAll(opStatsService.getCategoriesList());
 		return list;
 	}
+	
+	
+	/*
+	// direct injection or error status in the header 
+	@ModelAttribute("errorStatus")
+	public List<Boolean> getErrorStatus() {
+		List<Boolean> listError = new ArrayList<>();
+		listError.add(true);
+		return listError;
+	}
+	*/
+	
+	@ModelAttribute("errorStatus")
+	public boolean getErrorStatus() {
+		ArrayList<String[]> listArray = opStatsService.getOperationsWithErrors();
+		boolean listError;
+		if (listArray.size() > 0) {
+			listError = true;
+		} else {
+			listError = false;
+		}
+		return listError;
+	}
+	
 	
 }
