@@ -171,7 +171,7 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	
 		
 	// get monthly data history (average) for a single category 
-	public StatsDataSeriesType2 getCategoryHistoryAverage (String  opCategorieUserChoice) {
+	public StatsDataSeriesType2 getCategoryHistoryAverage (String opCategorieUserChoice) {
 				
 				// to fill the series
 				ArrayList<GlobalStatsDataType> categoryHistory = new ArrayList<GlobalStatsDataType>();
@@ -179,26 +179,47 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 				// return array
 				StatsDataSeriesType2 statsDataSeriesType2 = null;
 				
+				// average scope (number of items on which the average is calculated)
+				int averageWindow = 12;
+				
 				// average calculation
 				double averageSumC = 0;
 				double averageValueC = 0;
-				int indexC = 1;
+				ArrayList<Double> averageList = new ArrayList<Double>();
 				
-				
+						
 				// Identification de la catégorie selon le choix de l'utilisateur
 				for (StatType1 lOpStat : opStats.getlStat()) {
 					if (lOpStat.getOpCategory().equals(opCategorieUserChoice)) {
-									
-						for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {
+						// avarage calculation			
+						for (StatDataHistory sDataHistory : lOpStat.getDataHistory()) {													
 							
-							averageSumC += sDataHistory.getValue();
-							averageValueC = averageSumC / indexC;
+							// average with windows calculation
+							if (averageList.size() < averageWindow) {
+								averageList.add(sDataHistory.getValue());
+							}
+							else if (averageList.size() == averageWindow) {
+								// remove the oldest entry
+								averageList.remove(0);
+								// add the newest entry
+								averageList.add(sDataHistory.getValue());							
+							}
+							
+							// sum the value in the windows
+							for (Double value : averageList) {
+								averageSumC += value;
+							}
+							
+							// calculate the average
+							averageValueC = averageSumC / averageList.size();
+							
 							
 							GlobalStatsDataType globalStatsDataType = new GlobalStatsDataType(sDataHistory.getMonthAndYearShort(), Math.abs(averageValueC));
 							
-							indexC++;
-							
 							categoryHistory.add(globalStatsDataType);
+							
+							// reset sum for next loop
+							averageSumC = 0;
 											
 						}
 						

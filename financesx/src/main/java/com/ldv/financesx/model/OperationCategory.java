@@ -1,5 +1,6 @@
 package com.ldv.financesx.model;
 
+
 public class OperationCategory {
 
 		private String name;
@@ -9,7 +10,8 @@ public class OperationCategory {
 	
 	public OperationCategory() {
 	}
-		
+
+
 	public OperationCategory(String name, CategoryType type, boolean constraint) {
 		this.name = name;
 		this.type = type;
@@ -41,5 +43,4 @@ public class OperationCategory {
 	public boolean isConstraint() {
 		return constraint;
 	}
-		
 }

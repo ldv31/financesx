@@ -7,6 +7,8 @@ import java.util.logging.Level;
 
 import com.ldv.financesx.LogManager;
 
+import lombok.Data;
+
 /* Description : stockage des informations relative à une opération bancaire 
  * 
  */

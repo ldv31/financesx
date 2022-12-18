@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ldv.financesx.LogManager;
 import com.ldv.financesx.model.CategoryType;
@@ -17,7 +18,8 @@ import com.ldv.financesx.model.GlobalStatsDataType;
 import com.ldv.financesx.model.OperationCategory;
 import com.ldv.financesx.service.OpStatsService;
 
-@Controller
+@RestController
+//@Controller
 @RequestMapping(path = "/api/contact")
 public class HomeRestController {
 	
@@ -27,9 +29,7 @@ public class HomeRestController {
 	public HomeRestController(OpStatsService opStatsService) {
 		this.opStatsService = opStatsService;
 	}
-	
-	
-	
+		
 	
 	/**
     * Return the status of the server.
@@ -37,7 +37,7 @@ public class HomeRestController {
     * @return list of data per categories.
     */
 	@GetMapping("/getServerStatus")
-	@ResponseBody
+	//@ResponseBody
 	public String getServerStatus(@RequestParam(name = "status") String status) {
 		return status + " : " + "Server Status OK";
 	}
@@ -49,7 +49,7 @@ public class HomeRestController {
     * @return Global statistics.
     */
 	@GetMapping("/displayGlobaStats")
-	@ResponseBody
+	//@ResponseBody
 	public ArrayList<GlobalStatsDataType> displayGlobaStats() {
 		
 		ArrayList<GlobalStatsDataType> globalStatsDataList = opStatsService.getGlobalStatsSumDebit(false);
@@ -65,7 +65,7 @@ public class HomeRestController {
     * @return history statistics.
     */
 	@GetMapping("/displayStatsHistory")
-	@ResponseBody
+	//@ResponseBody
 	public ArrayList<GlobalStatsDataType> displayStatsHistory(@RequestBody OperationCategory operationCategory) {
 		
 		

@@ -54,7 +54,6 @@ public class HomeController {
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("globalstats.html");
 		
-		
 		// A. add the global stats for sum of expenses per categories
 		// parameter in function getGlobalStatsSumDebit is set to flase to get in formation on all categories
 		// parameter to true is for constraint categories only
@@ -119,14 +118,18 @@ public class HomeController {
       	}
         modelAndView.addObject("keySetMoyCredit", dataMoyCredit.keySet());
         modelAndView.addObject("valuesMoyCredit", dataMoyCredit.values());
-         
+        
+        // for exception error page test only
+        //ArrayList<GlobalStatsDataType> globalStatsDataListMoyDebitTest = new ArrayList<GlobalStatsDataType>();
+        //System.out.println("error for test" + globalStatsDataListMoyDebitTest.get(10));
+        
         // Main return statement 
         return modelAndView;
          
 	}
 	
 	
-	// page to display when seleted in the main page
+	// page to display when selected in the main page
 	@RequestMapping(value ={"/displayStatsHistory.html"}, method = RequestMethod.GET)
 	public ModelAndView displayStatsHistory(Model model) {
 	
