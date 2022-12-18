@@ -33,6 +33,7 @@ import com.ldv.financesx.model.StatType1;
 @Controller
 public class HomeController {
 
+	private final int averageWindows = 12;
 	
 	private final OpStatsService opStatsService;
 	
@@ -157,7 +158,7 @@ public class HomeController {
 		
 		// Add the global stats for sum of expenses per categories
 		ArrayList<GlobalStatsDataType> categoryHistory = opStatsService.getCategoryHistory(opCategorieUserChoice).getCategoryHistory();	
-		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName()).getCategoryHistory();
+		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName(), averageWindows).getCategoryHistory();
 		modelAndView.addObject("categoryHistory", categoryHistory);
 		modelAndView.addObject("categoryHistoryAverage", categoryHistoryAverage);
         
@@ -195,10 +196,27 @@ public class HomeController {
 	
 	// page to display after selecting a category in the drop-down
 	@RequestMapping(value ={"/historystatsselect.html"}, method = RequestMethod.POST)
-	public ModelAndView displayStatsHistorySelect(@ModelAttribute("opCategoryObject") OperationCategory opCategoryObject, Model model) {
+	public ModelAndView displayStatsHistorySelect(@ModelAttribute("opCategoryObject") OperationCategory opCategoryObject, Model model, @RequestParam("window") String window) {
 		
+		// size of the windows for average values (set to default)
+		int localWindows = averageWindows;
+			
 		// identify the max value for the display in between sums and average across all categories
 		double maxValueForChartHistory = 0;
+		
+		// get the windows value from the user;
+		if (window != null) {
+			if (window.length() > 0) {
+				try {
+					localWindows = Integer.parseInt(window) > 0 ? Integer.parseInt(window) : averageWindows;
+				}
+				// in case a non numerical value is entered
+				catch (NumberFormatException ex) {
+					LogManager.LOGGER.log(Level.FINE,"User did not enter a numerical value as expected");
+				}
+			}
+		}
+		
 		
 		LogManager.LOGGER.log(Level.FINE,"Category object after select: " + opCategoryObject);
 		
@@ -213,7 +231,7 @@ public class HomeController {
 		
 		// Add the global stats for sum of expenses per categories + average
 		ArrayList<GlobalStatsDataType> categoryHistory = opStatsService.getCategoryHistory(opCategoryObject.getName()).getCategoryHistory();
-		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName()).getCategoryHistory();
+		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName(), localWindows).getCategoryHistory();
 		modelAndView.addObject("categoryHistory", categoryHistory);
 		modelAndView.addObject("categoryHistoryAverage", categoryHistoryAverage);
         

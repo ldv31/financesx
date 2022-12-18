@@ -67,9 +67,9 @@ public class OpStatsService {
 	}
 	
 	
-	public StatsDataSeriesType2 getCategoryHistoryAverage (String  opCategorieUserChoice) {
+	public StatsDataSeriesType2 getCategoryHistoryAverage (String  opCategorieUserChoice, int averageWindows) {
     	
-		StatsDataSeriesType2 globalStatsDataList = opStatsRepository.getCategoryHistoryAverage(opCategorieUserChoice);
+		StatsDataSeriesType2 globalStatsDataList = opStatsRepository.getCategoryHistoryAverage(opCategorieUserChoice, averageWindows);
     	   	  	        
     	return globalStatsDataList;	
 	}

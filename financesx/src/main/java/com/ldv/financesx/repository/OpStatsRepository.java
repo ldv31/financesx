@@ -171,7 +171,8 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 	
 		
 	// get monthly data history (average) for a single category 
-	public StatsDataSeriesType2 getCategoryHistoryAverage (String opCategorieUserChoice) {
+	// averageWindows = numbers of items on which the average is calculated)
+	public StatsDataSeriesType2 getCategoryHistoryAverage (String opCategorieUserChoice, int averageWindow) {
 				
 				// to fill the series
 				ArrayList<GlobalStatsDataType> categoryHistory = new ArrayList<GlobalStatsDataType>();
@@ -179,9 +180,8 @@ public ArrayList<GlobalStatsDataType> getGlobalStatsMoyDebit () {
 				// return array
 				StatsDataSeriesType2 statsDataSeriesType2 = null;
 				
-				// average scope (number of items on which the average is calculated)
-				int averageWindow = 12;
 				
+						
 				// average calculation
 				double averageSumC = 0;
 				double averageValueC = 0;

@@ -126,14 +126,24 @@
 	<div>
 		<form name='f' th:object="${opCategoryObject}" method='POST'
 			action="historystatsselect.html">
-			<table>
-				<tr>
-					<td>Select Category:</td>
-					<td><select th:field="*{name}">
-							<option th:each="category: ${categorieslist}"
-								th:value="${category.name}" th:utext="${category.name}"></option>
-					</select></td>
-				</tr>
+			<table cellspacing="10" cellpadding="10">
+				<!-- select data row -->
+	            <tr>
+	                <td>Select Category:</td>
+	                <td>
+	                    <select  class="btn btn-secondary dropdown-toggle" th:field="*{name}">
+	                         <option th:each="category: ${categorieslist}" th:value="${category.name}" th:utext="${category.name}"></option>
+	                  </select>
+	                </td>
+	                <!-- Selection of the avarage windows -->
+	                <td>
+	                	<label for="window">Select average windows:</label>
+	                </td>
+	                <td>
+	                	<input type="number" placeholder="number of months" id="window" name="window"><br>
+	                </td>
+	            </tr>
+	            <!-- confirmation button row -->
 				<tr>
 					<td><button name="submit" type="submit" value="submit" class="btn btn-primary">Envoyer</button></td>
 				</tr>
