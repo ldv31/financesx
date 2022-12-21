@@ -132,33 +132,36 @@ public class HomeController {
 	
 	// page to display when selected in the main page
 	@RequestMapping(value ={"/displayStatsHistory.html"}, method = RequestMethod.GET)
-	public ModelAndView displayStatsHistory(Model model) {
+	public ModelAndView displayStatsHistory(@ModelAttribute("opCategoryObject") OperationCategory opCategoryObject, Model model) {
 	
+		// size of the windows for average values (set to default)
+		int localWindows = averageWindows;
+			
 		// identify the max value for the display in between sums and average across all categories
 		double maxValueForChartHistory = 0;
 		
-		// for debug 
-		LogManager.LOGGER.log(Level.FINE,"execution of /displayStatsHistory.html ");
-
+		// get average windows string
+		String averageWindowAlldisplays = opCategoryObject.getAverageWindowsSize();
+		
+		// get the windows value from the user;
+		if (averageWindowAlldisplays != null) {
+			if (averageWindowAlldisplays.length() > 0) {
+				try {
+					localWindows = Integer.parseInt(averageWindowAlldisplays) > 0 ? Integer.parseInt(averageWindowAlldisplays) : averageWindows;
+				}
+				// in case a non numerical value is entered
+				catch (NumberFormatException ex) {
+					LogManager.LOGGER.log(Level.FINE,"User did not enter a numerical value as expected");
+				}
+			}
+		}
 		
 		// create model and view
 		ModelAndView modelAndView = new ModelAndView("historystats.html");
-		
-		// Init the  category to display
-		String opCategorieUserChoice = new String("EDF");
-		
-		// will be used for the value selected in the drop-down
-		OperationCategory opCategoryObject = new OperationCategory();
-		opCategoryObject.setName("EDF");
-		opCategoryObject.setType(CategoryType.TOUS);
-		model.addAttribute("opCategoryObject", opCategoryObject);
-	
-		LogManager.LOGGER.log(Level.FINE,"Category object: " + opCategoryObject + "  Category : " + opCategoryObject.getName());
-		LogManager.LOGGER.log(Level.FINE,"Category object from model: " + model.getAttribute("opCategoryObject") + "  Category : " + opCategoryObject.getName());
-		
+				
 		// Add the global stats for sum of expenses per categories
-		ArrayList<GlobalStatsDataType> categoryHistory = opStatsService.getCategoryHistory(opCategorieUserChoice).getCategoryHistory();	
-		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName(), averageWindows).getCategoryHistory();
+		ArrayList<GlobalStatsDataType> categoryHistory = opStatsService.getCategoryHistory(opCategoryObject.getName()).getCategoryHistory();	
+		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName(), localWindows).getCategoryHistory();
 		modelAndView.addObject("categoryHistory", categoryHistory);
 		modelAndView.addObject("categoryHistoryAverage", categoryHistoryAverage);
         
@@ -182,83 +185,10 @@ public class HomeController {
         modelAndView.addObject("keySetCategoryHistoryAverage", dataCategoryHistoryAverage.keySet());
         modelAndView.addObject("valuesCategoryHistoryAverage", dataCategoryHistoryAverage.values()); 
         
-        modelAndView.addObject("CategoryNameDefault", opStatsService.getCategoryHistory(opCategorieUserChoice).getOpCategory());
-        modelAndView.addObject("CategoryName", opStatsService.getCategoryHistory(opCategorieUserChoice).getOpCategory() + ": valeures");
-        modelAndView.addObject("CategoryNameAverage", opStatsService.getCategoryHistory(opCategorieUserChoice).getOpCategory() + ": Moyenne" );
-        
-        // add to model the max value for the chart
-	    modelAndView.addObject("maxValueForChartHistory", maxValueForChartHistory);
-        
-        // Main return statement 
-        return modelAndView;
-        
-	}
-	
-	// page to display after selecting a category in the drop-down
-	@RequestMapping(value ={"/historystatsselect.html"}, method = RequestMethod.POST)
-	public ModelAndView displayStatsHistorySelect(@ModelAttribute("opCategoryObject") OperationCategory opCategoryObject, Model model, @RequestParam("window") String window) {
-		
-		// size of the windows for average values (set to default)
-		int localWindows = averageWindows;
-			
-		// identify the max value for the display in between sums and average across all categories
-		double maxValueForChartHistory = 0;
-		
-		// get the windows value from the user;
-		if (window != null) {
-			if (window.length() > 0) {
-				try {
-					localWindows = Integer.parseInt(window) > 0 ? Integer.parseInt(window) : averageWindows;
-				}
-				// in case a non numerical value is entered
-				catch (NumberFormatException ex) {
-					LogManager.LOGGER.log(Level.FINE,"User did not enter a numerical value as expected");
-				}
-			}
-		}
-		
-		
-		LogManager.LOGGER.log(Level.FINE,"Category object after select: " + opCategoryObject);
-		
-		OperationCategory opCategoryObjectFrompModel = (OperationCategory)model.getAttribute("opCategoryObject");
-		LogManager.LOGGER.log(Level.FINE,"Category object after select, from model: " + opCategoryObjectFrompModel + "  Category : " + opCategoryObjectFrompModel.getName());
-		
-		LogManager.LOGGER.log(Level.FINE,"execution of /historystatsselect.html + category name : " + opCategoryObject.getName());
-
-		// create model and view
-		ModelAndView modelAndView = new ModelAndView("historystatsselect.html");
-			
-		
-		// Add the global stats for sum of expenses per categories + average
-		ArrayList<GlobalStatsDataType> categoryHistory = opStatsService.getCategoryHistory(opCategoryObject.getName()).getCategoryHistory();
-		ArrayList<GlobalStatsDataType> categoryHistoryAverage = opStatsService.getCategoryHistoryAverage(opCategoryObject.getName(), localWindows).getCategoryHistory();
-		modelAndView.addObject("categoryHistory", categoryHistory);
-		modelAndView.addObject("categoryHistoryAverage", categoryHistoryAverage);
-        
-        //Intermediate datastore
-        Map<String, Double> dataCategoryHistory = new LinkedHashMap<String, Double>();
-        Map<String, Double> dataCategoryHistoryAverage = new LinkedHashMap<String, Double>();
-        
-        
-        for (GlobalStatsDataType stat : categoryHistory) {
-    		dataCategoryHistory.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
-        	maxValueForChartHistory = (Precision.round(stat.getOpValue(),1) > maxValueForChartHistory) ? Precision.round(stat.getOpValue(),1) : maxValueForChartHistory;
-    	}
-        
-        for (GlobalStatsDataType stat : categoryHistoryAverage) {
-    		dataCategoryHistoryAverage.put(stat.getIndex(), Precision.round(stat.getOpValue(),1));
-    	}
-        
-        modelAndView.addObject("keySetCategoryHistory", dataCategoryHistory.keySet());
-        modelAndView.addObject("valuesCategoryHistory", dataCategoryHistory.values());
-        
-        modelAndView.addObject("keySetCategoryHistoryAverage", dataCategoryHistoryAverage.keySet());
-        modelAndView.addObject("valuesCategoryHistoryAverage", dataCategoryHistoryAverage.values());
-        
-        modelAndView.addObject("CategoryNameDefault", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory());     
+        modelAndView.addObject("CategoryNameDefault", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory());
         modelAndView.addObject("CategoryName", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory() + ": valeures");
-        modelAndView.addObject("CategoryNameAverage", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory() + ": moyenne");
-	
+        modelAndView.addObject("CategoryNameAverage", opStatsService.getCategoryHistory(opCategoryObject.getName()).getOpCategory() + ": Moyenne" );
+        
         // add to model the max value for the chart
 	    modelAndView.addObject("maxValueForChartHistory", maxValueForChartHistory);
         
@@ -1059,5 +989,16 @@ public class HomeController {
 		return listError;
 	}
 	
+	
+	//initial injection of object to manage history category selection 	
+	@ModelAttribute("opCategoryObject")
+	// will be used for the value selected in the drop-down
+	public OperationCategory getOperationCategory() {
+		OperationCategory opCategoryObject = new OperationCategory();
+		opCategoryObject.setName("Eau");
+		opCategoryObject.setType(CategoryType.TOUS);
+		opCategoryObject.setAverageWindowsSize(Integer.toString(averageWindows));
+		return opCategoryObject;
+	}
 	
 }

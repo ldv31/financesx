@@ -140,7 +140,10 @@
  </script>
  
  <div>
+ <!--
   	<form name='f' th:object="${opCategoryObject}" method='POST' action="historystatsselect.html">
+ -->
+ 	<form name='f' th:object="${opCategoryObject}" method='get' action="displayStatsHistory.html">
         <table cellspacing="10" cellpadding="10">
         	<!-- select data row -->
             <tr>
@@ -155,7 +158,10 @@
                 	<label for="window">Select average windows:</label>
                 </td>
                 <td>
+                	<!--
                 	<input type="number" placeholder="number of months" id="window" name="window"><br>
+                	  -->
+                	<input type="number" placeholder="number of months" th:field="*{averageWindowsSize}"><br>
                 </td>
             </tr>
             <!-- confirmation button row -->

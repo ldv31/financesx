@@ -6,6 +6,8 @@ public class OperationCategory {
 		private String name;
 		CategoryType type;
 		boolean constraint;
+		// define the windows size for calculating average values 
+		String averageWindowsSize;
 	
 	
 	public OperationCategory() {
@@ -43,4 +45,17 @@ public class OperationCategory {
 	public boolean isConstraint() {
 		return constraint;
 	}
+
+
+	public String getAverageWindowsSize() {
+		return averageWindowsSize;
+	}
+
+
+	public void setAverageWindowsSize(String averageWindowsSize) {
+		this.averageWindowsSize = averageWindowsSize;
+	}
+	
+	
+	
 }
